@@ -85,11 +85,6 @@
         background-color: #e6f0ff;
         border-color: #007aff;
     }
-    /* Style untuk kategori yang nonaktif */
-    .category.inactive {
-        opacity: 0.5;
-        border-style: dashed;
-    }
 
     .category img {
       width: 50px;
@@ -139,13 +134,6 @@
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       border-left: 5px solid #007aff;
       transition: 0.3s;
-      position: relative;
-    }
-    
-    /* Style untuk produk nonaktif */
-    .product-card.inactive {
-        opacity: 0.6;
-        filter: grayscale(100%);
     }
 
     .product-card h4 {
@@ -160,16 +148,13 @@
         font-weight: 600;
     }
     
-    /* Status Labels */
-    .status-tag {
+    .ready-status {
+        color: #28a745; 
         font-weight: 600;
         margin-right: 8px;
         font-size: 0.95rem;
     }
-    .status-ready { color: #28a745; }
-    .status-habis { color: #f44336; }
-    .status-gangguan { color: #ff9800; }
-    
+
     .product-card p {
       font-size: 0.95rem;
       margin-bottom: 15px;
@@ -193,16 +178,12 @@
       transition: 0.2s;
       box-shadow: 0 2px 4px rgba(0, 122, 255, 0.4);
     }
-    .product-card.inactive .buy-btn {
-        background: #999;
-        cursor: not-allowed;
-    }
 
     /* === ADMIN PANEL STYLES === */
     #admin-panel {
         display: none; 
         width: 100%;
-        max-width: 700px;
+        max-width: 600px;
         margin-top: 40px;
         padding: 20px;
         background: #fff8e1;
@@ -217,12 +198,6 @@
         margin-bottom: 15px;
         font-family: 'Poppins', sans-serif;
         font-size: 1.5rem;
-    }
-    #admin-panel h3 {
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.2rem;
-        color: #ff9800;
-        margin-top: 20px;
     }
     #admin-panel label {
         display: block;
@@ -250,7 +225,6 @@
         border-radius: 8px;
         cursor: pointer;
         font-weight: bold;
-        transition: background 0.2s;
     }
     .add-btn { background: #4CAF50; color: white; }
     .delete-btn { background: #f44336; color: white; }
@@ -263,33 +237,9 @@
     .admin-product-item {
         border: 1px solid #ffe0b2;
         padding: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         border-radius: 8px;
         background: #ffffff;
-    }
-    .admin-status-control {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-        gap: 15px;
-        flex-wrap: wrap;
-    }
-    .admin-status-control select {
-        width: auto;
-        flex-grow: 1;
-        margin: 0;
-    }
-    .admin-status-control label {
-        margin: 0;
-    }
-
-    #add-product-container, #add-category-form {
-        display: none;
-        border: 1px solid #ccc;
-        padding: 15px;
-        border-radius: 10px;
-        background: #f9f9f9;
-        margin-top: 15px;
     }
     /* === END ADMIN PANEL STYLES === */
 
@@ -318,6 +268,20 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     }
 
+    .modal-content h3 {
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 15px;
+    }
+
+    .modal-content input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
     .qr-image {
       margin-top: 15px;
       border-radius: 10px;
@@ -333,6 +297,23 @@
       font-weight: bold;
       cursor: pointer;
     }
+    /* === END MODAL STYLES === */
+
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    footer a {
+      color: #007aff;
+      text-decoration: none;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -341,380 +322,199 @@
   </header>
 
   <div class="main-content">
-    <section class="category-container" id="category-container">
-      </section>
+    <section class="category-container">
+      <div class="category" id="cat-indosat" onclick="toggleProducts('indosat')">
+        <img src="https://iili.io/KyFri8u.png" alt="Indosat" />
+        <h3>Kuota Indosat</h3>
+      </div>
 
-    <section id="productSection" class="product-list">
-        </section>
+      <div class="category" id="cat-telkomsel" onclick="toggleProducts('telkomsel')">
+        <img src="https://iili.io/KyF4MAb.png" alt="Telkomsel" />
+        <h3>Kuota Telkomsel</h3>
+      </div>
+
+      <div class="category" id="cat-xl" onclick="toggleProducts('xl')">
+        <img src="https://iili.io/KyF66mb.png" alt="XL Akrab" />
+        <h3>Kuota XL Akrab</h3>
+      </div>
+    </section>
+
+    <section id="productSection" class="product-list"></section>
   </div>
 
   <div id="admin-panel">
-    <h2>🔑 Panel Admin (Full Management)</h2>
-    <p style="color:green; font-weight: bold;">✅ Perubahan akan disimpan permanen di Database.</p>
-    
-    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
-        <button class="action-btn update-btn" onclick="fetchData()" style="flex-grow: 1;">🔄 Refresh Data dari Database</button>
-    </div>
+    <h2>🔑 Panel Admin (Live Edit)</h2>
+    <p style="color:red; font-weight: bold;">⚠️ Perubahan akan hilang jika halaman di-refresh!</p>
 
-    <h3 style="margin-top:25px; color:#007aff;">⚙️ Manajemen Kategori</h3>
-    <div id="category-management-container" style="padding:15px; border:1px solid #d0e4ff; border-radius:10px; background:#f0f7ff;">
-        
-        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-            <label for="admin-category-select-manage" style="margin: 0; align-self: center;">Pilih Kategori:</label>
-            <select id="admin-category-select-manage" onchange="renderCategoryDetails()" style="width: 150px; margin: 0;"></select>
-            <button class="action-btn add-btn" onclick="toggleAddCategoryForm()" style="padding: 8px 12px;">+ Kategori Baru</button>
-        </div>
-
-        <div id="add-category-form">
-            <h4>Tambah Kategori Baru</h4>
-            <input type="text" id="new-cat-name" placeholder="Nama Kategori (misal: Telkomsel)" />
-            <input type="text" id="new-cat-color" placeholder="Warna (misal: #007aff)" />
-            <input type="text" id="new-cat-icon" placeholder="URL Icon" />
-            <input type="number" id="new-cat-order" placeholder="Urutan Tampil (angka)" />
-            <button class="action-btn add-btn" onclick="addCategory()">Tambah Kategori Permanen</button>
-        </div>
-        
-        <div id="category-details" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: white; margin-top: 15px;">
-            <h4>Edit Kategori Terpilih</h4>
-            <label>ID Kategori:</label><input type="text" id="edit-cat-id" disabled style="background: #eee;"/>
-            <label>Nama:</label><input type="text" id="edit-cat-name" />
-            <label>Warna:</label><input type="text" id="edit-cat-color" />
-            <label>Icon URL:</label><input type="text" id="edit-cat-icon" />
-            <label>Urutan:</label><input type="number" id="edit-cat-order" />
-            
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <label style="margin:0;">Status Kategori (Aktif/Nonaktif):</label>
-                <select id="edit-cat-active" style="width: auto; flex-grow:1; margin:0;">
-                    <option value="true">✅ Aktif</option>
-                    <option value="false">❌ Nonaktif (Sembunyikan Semua Produk)</option>
-                </select>
-            </div>
-
-            <button class="action-btn update-btn" onclick="updateCategory()">Simpan Perubahan Kategori</button>
-            <button class="action-btn delete-btn" onclick="deleteCategory()">Hapus Kategori & Produk</button>
-        </div>
-    </div>
-
+    <label for="admin-category-select">Pilih Kategori:</label>
+    <select id="admin-category-select" onchange="renderAdminProducts()">
+      <option value="indosat">Indosat</option>
+      <option value="telkomsel">Telkomsel</option>
+      <option value="xl">XL Akrab</option>
+    </select>
 
     <div class="section-separator"></div>
-
-    <h3 style="color:#007aff;">📦 Manajemen Produk Kategori (<span id="editing-category-name">...</span>)</h3>
-    
-    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
-        <label for="admin-category-select" style="margin: 0;">Kelola Kategori:</label>
-        <select id="admin-category-select" onchange="renderAdminProducts()" style="width: 150px; margin: 0;"></select>
-        <button class="action-btn add-btn" onclick="toggleAddProductForm()" style="flex-grow: 1;">+ Tambah Produk</button>
-    </div>
-
-    <div id="add-product-container">
-        <h4>Tambah Produk ke Kategori <strong id="selected-add-category">...</strong></h4>
-        <label for="new-product-name">Nama Produk:</label>
-        <input type="text" id="new-product-name" placeholder="Contoh: XL 10GB" />
-
-        <label for="new-product-price">Harga (Rp):</label>
-        <input type="number" id="new-product-price" />
-        
-        <label for="new-product-image">URL Gambar (Opsional):</label>
-        <input type="text" id="new-product-image" placeholder="https://..." />
-
-        <label for="new-product-desc">Deskripsi:</label>
-        <textarea id="new-product-desc" placeholder="Contoh: Masa aktif 30 hari."></textarea>
-        
-        <label for="new-product-order">Urutan Tampil (Angka):</label>
-        <input type="number" id="new-product-order" placeholder="1, 2, 3, ..." value="10" />
-
-        <button class="action-btn add-btn" onclick="addNewProduct()">Simpan Produk Permanen</button>
-    </div>
-
-    <div class="section-separator"></div>
-    <h4>Daftar Produk yang Tersimpan</h4>
+    <h3>Edit/Hapus Produk</h3>
     <div id="admin-products-list">
-      <p>Pilih kategori di atas untuk memuat daftar produk.</p>
-    </div>
+      </div>
 
+    <div class="section-separator"></div>
+    <h3>Tambah Produk Baru</h3>
+    <div id="add-product-form">
+      <label for="new-product-name">Nama Produk:</label>
+      <input type="text" id="new-product-name" placeholder="Contoh: Indosat 100GB" />
+
+      <label for="new-product-price">Harga (Contoh: 120000):</label>
+      <input type="number" id="new-product-price" />
+
+      <label for="new-product-desc">Deskripsi (Gunakan &lt;br&gt; untuk baris baru):</label>
+      <textarea id="new-product-desc"></textarea>
+
+      <button class="action-btn add-btn" onclick="addNewProduct()">+ Tambah Produk</button>
+    </div>
+    
     <div class="section-separator"></div>
     <button class="action-btn update-btn" onclick="hideAdminPanel()">Sembunyikan Panel</button>
   </div>
-  
   <div id="paymentModal" class="modal">
     <div class="modal-content" id="modalContent">
       </div>
   </div>
-  
-  <br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br>
   <footer>
     Butuh bantuan? Hubungi <a href="https://wa.me/6285751817154" target="_blank">Admin</a><br>
     © 2024 NetHub Digital. Semua Hak Dilindungi.
   </footer>
 
   <script>
-    // =======================================================
-    // PENGATURAN GLOBAL DAN KONEKSI API
-    // =======================================================
-
-    // !!! GANTI INI DENGAN URL VERCEL ANDA YANG SESUNGGUHNYA !!!
-    const BASE_URL = 'https://nethub-digital-store.vercel.app'; 
-    const API_URL = `${BASE_URL}/api/products`; 
-    const API_CATEGORY_URL = `${BASE_URL}/api/categories`; 
-
+    // SANDI ADMIN
     const ADMIN_PASSWORD = "012529";
+    // STATUS READY
+    const R = "<span class='ready-status'>✅ Ready Stock</span> | ";
     
-    // Data Kategori Awal (Digunakan jika API Kategori Gagal)
-    let categoriesData = [
-        { id: 'cat-indosat', name: 'Kuota Indosat', icon_url: 'https://iili.io/KyFri8u.png', category_order: 1, is_active: true, color: '#007aff' },
-        { id: 'cat-telkomsel', name: 'Kuota Telkomsel', icon_url: 'https://iili.io/KyF4MAb.png', category_order: 2, is_active: true, color: '#f44336' },
-        { id: 'cat-xl', name: 'Kuota XL Akrab', icon_url: 'https://iili.io/KyF66mb.png', category_order: 3, is_active: true, color: '#ff9800' }
-    ];
-
-    // Data produk awal (SEED DATA) - DATA LENGKAP
-    const SEED_PRODUCTS = {
-        'cat-indosat': [
-            { id: 101, name: 'Indosat 50GB', price: 55000, description: '- Kuota Aktif 28 Hari\n- Jaringan 4G/5G\n- Proses cepat otomatis', product_order: 1, is_active: true, stock_status: 'ready', image_url: '' },
-            { id: 102, name: 'Indosat 80GB', price: 95000, description: '- Kuota Aktif 30 Hari\n- Jaringan 4G/5G\n- Proses cepat otomatis', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' }
-        ],
-        'cat-telkomsel': [
-            { id: 201, name: 'Telkomsel 30GB', price: 65000, description: '- Kuota Nasional aktif 30 hari\n- Berlaku semua jaringan\n- Aktivasi instan', product_order: 1, is_active: true, stock_status: 'ready', image_url: '' },
-            { id: 202, name: 'Telkomsel 80GB', price: 120000, description: '- Kuota Nasional aktif 30 hari\n- Bonus tambahan 5GB YouTube', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' }
-        ],
-        'cat-xl': [
-            { id: 301, name: 'XL SUPERMINI', price: 39000, description: 'Masa aktif: 27/28 hari\n- AREA 1: 13–15 GB\n- AREA 4: 30–32 GB', product_order: 1, is_active: true, stock_status: 'habis', image_url: '' },
-            { id: 302, name: 'XL MINI', price: 50000, description: 'Masa aktif: 27/28 hari\n- AREA 1: 32–34 GB\n- AREA 4: 49–51 GB', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' },
-            { id: 303, name: 'XL AKRAB 1', price: 60000, description: '- Kuota utama 10GB\n- 4 Member\n- Masa Aktif 30 hari', product_order: 3, is_active: true, stock_status: 'ready', image_url: '' },
-            { id: 304, name: 'XL AKRAB 2', price: 80000, description: '- Kuota utama 25GB\n- 4 Member\n- Masa Aktif 30 hari', product_order: 4, is_active: true, stock_status: 'ready', image_url: '' },
-            { id: 305, name: 'XL AKRAB 3', price: 100000, description: '- Kuota utama 40GB\n- 4 Member\n- Masa Aktif 30 hari', product_order: 5, is_active: true, stock_status: 'ready', image_url: '' }
-        ]
+    // VARIABEL PRODUK GLOBAL
+    let products = {
+      indosat: [
+        { name: 'Indosat 50GB', price: 55000, desc: R + '- Kuota Indosat Aktif 28 Hari<br>- Jaringan 4G/5G seluruh Indonesia<br>- Garansi sesuai masa aktif<br>- Proses cepat otomatis' },
+        { name: 'Indosat 80GB', price: 95000, desc: R + '- Kuota Indosat Aktif 30 Hari<br>- Jaringan 4G/5G seluruh Indonesia<br>- Garansi sesuai masa aktif<br>- Proses cepat otomatis' }
+      ],
+      telkomsel: [
+        { name: 'Telkomsel 30GB', price: 65000, desc: R + '- Kuota Nasional aktif 30 hari<br>- Berlaku semua jaringan<br>- Garansi masa aktif penuh<br>- Aktivasi instan' },
+        { name: 'Telkomsel 80GB', price: 120000, desc: R + '- Kuota Nasional aktif 30 hari<br>- Bonus tambahan 5GB YouTube<br>- Garansi masa aktif penuh<br>- Aktivasi instan' }
+      ],
+      xl: [
+        { name: 'XL SUPERMINI', price: 39000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 13–15 GB<br>- AREA 2: 15–17 GB<br>- AREA 3: 20–22 GB<br>- AREA 4: 30–32 GB' },
+        { name: 'XL MINI', price: 50000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 32–34 GB<br>- AREA 2: 34–36 GB<br>- AREA 3: 39–41 GB<br>- AREA 4: 49–51 GB' },
+        { name: 'XL BIG', price: 55000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 38–40 GB<br>- AREA 2: 40–42 GB<br>- AREA 3: 45–47 GB<br>- AREA 4: 55–57 GB' }, 
+        { name: 'XL JUMBO V2', price: 63000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 50–53 GB<br>- AREA 2: 52–55 GB<br>- AREA 3: 57–60 GB<br>- AREA 4: 67–70 GB' },
+        { name: 'XL BIG SUPER', price: 71000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 63–65 GB<br>- AREA 2: 65–67 GB<br>- AREA 3: 70–72 GB<br>- AREA 4: 80–82 GB' },
+        { name: 'XL JUMBO', price: 85000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 65 GB<br>- AREA 2: 70 GB<br>- AREA 3: 83 GB<br>- AREA 4: 123 GB' },
+        { name: 'XL JUMBO V3', price: 87000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 87–90 GB<br>- AREA 2: 89–92 GB<br>- AREA 3: 94–97 GB<br>- AREA 4: 104–107 GB' }
+      ]
     };
 
-
-    let products = {}; 
     let activeCategory = null;
-    let dataFetched = false; 
-    
-    // =======================================================
-    // FUNGSI UTILITY & UI
-    // =======================================================
-
-    function getStatusTag(status) {
-        if (status === 'habis') {
-            return "<span class='status-tag status-habis'>❌ Habis</span>";
-        } else if (status === 'gangguan') {
-            return "<span class='status-tag status-gangguan'>⚠️ Gangguan</span>";
-        }
-        return "<span class='status-tag status-ready'>✅ Ready Stock</span>";
-    }
-
-    function showLoading(show) {
-        const section = document.getElementById('productSection');
-        if (show) {
-             section.innerHTML = '<h4>Memuat data dari database...</h4>';
-             section.style.display = 'block';
-        } else if (section.innerHTML.includes('Memuat data')) {
-             section.innerHTML = '';
-        }
-    }
 
     // =======================================================
-    // FUNGSI FETCH DATA DARI API (2 ENDPOINT)
+    // FUNGSI UTAMA USER INTERFACE
     // =======================================================
 
-    async function fetchData() {
-        showLoading(true);
-        try {
-            // 1. Fetch Categories
-            const catResponse = await fetch(API_CATEGORY_URL);
-            if (catResponse.ok) {
-                categoriesData = await catResponse.json();
-                categoriesData.sort((a, b) => a.category_order - b.category_order);
-            } else {
-                 console.warn("Gagal fetch kategori dari API. Menggunakan data SEED Kategori.");
-            }
-            
-            // 2. Fetch Products
-            const prodResponse = await fetch(API_URL);
-            if (prodResponse.ok) {
-                // Asumsi API produk mengembalikan objek { 'category-id': [produk], ... }
-                products = await prodResponse.json(); 
-            } else {
-                 console.warn("Gagal fetch produk dari API. Menggunakan data SEED Produk.");
-                 products = SEED_PRODUCTS;
-            }
-            
-            dataFetched = true;
-            showLoading(false);
-            
-            // Render UI Setelah Data Diperoleh
-            renderCategoriesToUserInterface();
-            if (document.getElementById('admin-panel').style.display === 'block') {
-                populateAdminCategoriesDropdowns();
-                renderCategoryDetails();
-            }
-            
-        } catch (e) {
-            console.error('API FETCH ERROR:', e);
-            products = SEED_PRODUCTS; // Fallback ke SEED
-            dataFetched = true;
-            showLoading(false);
-            renderCategoriesToUserInterface();
-        }
-    }
-    
-    document.addEventListener('DOMContentLoaded', fetchData);
+    function toggleProducts(category) {
+      const section = document.getElementById('productSection');
+      const allCategories = document.querySelectorAll('.category');
+      const currentCategoryElement = document.getElementById(`cat-${category}`);
 
-    // =======================================================
-    // FUNGSI FRONTEND USER (Tampilan Toko)
-    // =======================================================
-    
-    function renderCategoriesToUserInterface() {
-        const container = document.getElementById('category-container');
-        container.innerHTML = '';
-        
-        categoriesData.forEach(cat => {
-            if (!cat.is_active) return; // Sembunyikan jika kategori nonaktif
-            
-            const div = document.createElement('div');
-            div.className = 'category';
-            div.id = `cat-${cat.id}`;
-            div.style.borderLeft = `5px solid ${cat.color}`;
-            div.onclick = () => toggleProducts(cat.id);
-            
-            div.innerHTML = `
-                <img src="${cat.icon_url}" alt="${cat.name}" />
-                <h3>${cat.name}</h3>
-            `;
-            container.appendChild(div);
-        });
-    }
+      if (activeCategory === category) {
+        section.style.display = 'none';
+        currentCategoryElement.classList.remove('active');
+        activeCategory = null;
+        return; 
+      }
 
-    async function toggleProducts(categoryId) {
-        const section = document.getElementById('productSection');
-        const allCategories = document.querySelectorAll('.category');
-        const currentCategoryElement = document.getElementById(`cat-${categoryId}`);
-        const category = categoriesData.find(c => c.id === categoryId);
+      activeCategory = category;
 
-        if (!dataFetched) { await fetchData(); }
-        if (!category || !category.is_active) return;
+      allCategories.forEach(cat => cat.classList.remove('active'));
+      currentCategoryElement.classList.add('active');
 
-        if (activeCategory === categoryId) {
-            section.style.display = 'none';
-            currentCategoryElement.classList.remove('active');
-            activeCategory = null;
-            return; 
-        }
+      section.innerHTML = '';
+      
+      // Tambahkan Tombol Cek Area XL (Hanya untuk XL)
+      if (category === 'xl') {
+          const checkAreaLink = document.createElement('a');
+          checkAreaLink.href = "https://raw.githack.com/vieralola/Cekareaviera.html/main/Cekareaviera.html";
+          checkAreaLink.target = "_blank";
+          checkAreaLink.className = "product-utility-link";
+          checkAreaLink.textContent = "🗺️ Klik Di Sini Untuk Cek Area XL Akrab";
+          section.appendChild(checkAreaLink);
+      }
 
-        activeCategory = categoryId;
-        allCategories.forEach(cat => cat.classList.remove('active'));
-        currentCategoryElement.classList.add('active');
-
-        section.innerHTML = '';
-        
-        // Tambahkan Tombol Cek Area XL
-        if (categoryId === 'cat-xl') {
-            const checkAreaLink = document.createElement('a');
-            checkAreaLink.href = "https://raw.githack.com/vieralola/Cekareaviera.html/main/Cekareaviera.html";
-            checkAreaLink.target = "_blank";
-            checkAreaLink.className = "product-utility-link";
-            checkAreaLink.textContent = "🗺️ Klik Di Sini Untuk Cek Area XL Akrab";
-            section.appendChild(checkAreaLink);
-        }
-
-        const productsList = products[categoryId] || [];
-        productsList.sort((a, b) => a.product_order - b.product_order); // Urutkan
-
-        if (productsList.length > 0) {
-            productsList.forEach(p => {
-                // Hanya tampilkan produk yang is_active = true
-                if (!p.is_active) return; 
-                
-                const div = document.createElement('div');
-                div.className = 'product-card';
-                div.style.borderLeft = `5px solid ${category.color}`;
-                
-                const statusTag = getStatusTag(p.stock_status); 
-                const descHtml = (p.description || '').replace(/\n/g, '<br>');
-                const isDisabled = p.stock_status !== 'ready';
-
-                if (isDisabled) {
-                    div.classList.add('inactive');
-                }
-
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h4><span>${p.name}</span></h4>
-                        ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" style="width: 40px; height: 40px; border-radius: 5px; object-fit: cover;">` : ''}
-                    </div>
-                    <p>${statusTag} ${descHtml}</p>
-                    <p><strong>Harga: Rp ${p.price.toLocaleString()}</strong></p>
-                    <button class='buy-btn' ${isDisabled ? 'disabled' : ''} onclick='${isDisabled ? '' : `openModal(${p.price})`}'>
-                        ${isDisabled ? 'Stok Tidak Tersedia' : 'Beli Sekarang'}
-                    </button>
-                `;
-                section.appendChild(div);
-            });
-        } else {
-            section.innerHTML = `<h4>Tidak ada produk aktif di kategori ${category.name}.</h4>`;
-        }
-        
-        section.style.display = 'block';
-        section.scrollIntoView({ behavior: 'smooth' });
+      products[category].forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-card';
+        // Fungsi openModal sekarang menerima harga
+        div.innerHTML = `<h4><span>${p.name}</span></h4><p>${p.desc}</p><p><strong>Harga: Rp ${p.price.toLocaleString()}</strong></p><button class='buy-btn' onclick='openModal(${p.price})'>Beli Sekarang</button>`;
+        section.appendChild(div);
+      });
+      
+      section.style.display = 'block';
+      section.scrollIntoView({ behavior: 'smooth' });
     }
     
     // =======================================================
-    // FUNGSI MODAL PEMBAYARAN (TETAP)
+    // FUNGSI MODAL PEMBAYARAN
     // =======================================================
-
     let selectedPrice = 0;
 
     function openModal(price) {
-        selectedPrice = price;
-        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent('00020101021126670016COM.NOBUBANK.WWW01189360050300000907180214531277541631500303UMI51440014ID.CO.QRIS.WWW0215ID20254466748920303UMI5204481253033605802ID5914Pulsa CELLULAR6009INDONESIA61059024262070703A0163045CAF')}&size=220x220`;
-
-        document.getElementById('modalContent').innerHTML = `
-            <h3>Masukkan Nomor HP</h3>
-            <input type='number' id='phoneNumber' placeholder='08xxxxxxxxxx' />
-            <button class='buy-btn' onclick='showQR("${qrUrl}")'>Bayar Sekarang</button>
-            <button class='close-btn' onclick='closeModal()'>Batal</button>
-        `;
-        document.getElementById('paymentModal').style.display = 'flex';
+      selectedPrice = price;
+      // Langkah 1: Tampilkan input Nomor HP
+      document.getElementById('modalContent').innerHTML = `
+        <h3>Masukkan Nomor HP</h3>
+        <input type='number' id='phoneNumber' placeholder='08xxxxxxxxxx' />
+        <button class='buy-btn' onclick='showQR()'>Bayar Sekarang</button>
+        <button class='close-btn' onclick='closeModal()'>Batal</button>
+      `;
+      document.getElementById('paymentModal').style.display = 'flex';
     }
 
     function closeModal() {
-        document.getElementById('paymentModal').style.display = 'none';
+      document.getElementById('paymentModal').style.display = 'none';
     }
 
-    function showQR(qrUrl) {
-        const modal = document.getElementById('modalContent');
-        const phone = document.getElementById('phoneNumber').value;
+    function showQR() {
+      const qrString = '00020101021126670016COM.NOBUBANK.WWW01189360050300000907180214531277541631500303UMI51440014ID.CO.QRIS.WWW0215ID20254466748920303UMI5204481253033605802ID5914Pulsa CELLULAR6009INDONESIA61059024262070703A0163045CAF';
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrString)}&size=220x220`;
+      const modal = document.getElementById('modalContent');
+      const phone = document.getElementById('phoneNumber').value;
 
-        if (!phone || phone.length < 8) {
-            alert('Masukkan nomor HP yang valid terlebih dahulu!');
-            return;
-        }
-        
-        modal.innerHTML = `
-            <h3>Pembayaran</h3>
-            <p>Nominal: <strong>Rp ${selectedPrice.toLocaleString()}</strong></p>
-            <p>Tujuan: <strong>${phone}</strong></p>
-            <p>Silakan transfer menggunakan QRIS di bawah ini:</p>
-            <img class='qr-image' src='${qrUrl}' alt='QRIS' />
-            <p style='margin-top:10px;font-size:0.9rem;color:#555'>Setelah transfer, pesanan akan otomatis diproses.</p>
-            <button class='close-btn' onclick='closeModal()'>Tutup</button>
-        `;
+      if (!phone || phone.length < 8) {
+        alert('Masukkan nomor HP yang valid terlebih dahulu!');
+        return;
+      }
+      
+      // Langkah 2: Tampilkan QRIS dan rincian transaksi
+      modal.innerHTML = `
+        <h3>Pembayaran</h3>
+        <p>Nominal: <strong>Rp ${selectedPrice.toLocaleString()}</strong></p>
+        <p>Tujuan: <strong>${phone}</strong></p>
+        <p>Silakan transfer menggunakan QRIS di bawah ini:</p>
+        <img class='qr-image' src='${qrUrl}' alt='QRIS' />
+        <p style='margin-top:10px;font-size:0.9rem;color:#555'>Setelah transfer, pesanan akan otomatis diproses.</p>
+        <button class='close-btn' onclick='closeModal()'>Tutup</button>
+      `;
     }
 
 
     // =======================================================
-    // FUNGSI ADMIN PANEL (CORE)
+    // FUNGSI ADMIN PANEL
     // =======================================================
     
+    // Trigger Admin Panel (Double-click header)
     document.getElementById('main-header').addEventListener('dblclick', promptAdminPassword);
-    
+
     function promptAdminPassword() {
-        if (!dataFetched) {
-            alert("Harap tunggu, data produk sedang dimuat. Coba lagi dalam 5 detik.");
-            return;
-        }
-        
         const panel = document.getElementById('admin-panel');
+        // Jika sudah terbuka, kita tutup tanpa prompt
         if (panel.style.display === 'block') {
             hideAdminPanel();
             return;
@@ -731,226 +531,106 @@
 
     function showAdminPanel() {
         document.getElementById('admin-panel').style.display = 'block';
-        populateAdminCategoriesDropdowns();
-        renderCategoryDetails(); // Otomatis merender produk pertama
+        renderAdminProducts();
     }
 
     function hideAdminPanel() {
         document.getElementById('admin-panel').style.display = 'none';
     }
-    
-    function populateAdminCategoriesDropdowns() {
-        const selectProduct = document.getElementById('admin-category-select');
-        const selectManage = document.getElementById('admin-category-select-manage');
-        
-        [selectProduct, selectManage].forEach(select => {
-            select.innerHTML = '';
-            categoriesData.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.id; 
-                option.textContent = cat.name;
-                if (!cat.is_active) {
-                    option.textContent += ' (Nonaktif)';
-                }
-                select.appendChild(option);
-            });
+
+    // Render daftar produk di panel admin
+    function renderAdminProducts() {
+        const category = document.getElementById('admin-category-select').value;
+        const list = document.getElementById('admin-products-list');
+        list.innerHTML = '';
+
+        products[category].forEach((p, index) => {
+            const item = document.createElement('div');
+            item.className = 'admin-product-item';
+            item.innerHTML = `
+                <label>Nama Produk:</label>
+                <input type="text" id="name-${category}-${index}" value="${p.name}" />
+
+                <label>Harga:</label>
+                <input type="number" id="price-${category}-${index}" value="${p.price}" />
+
+                <label>Deskripsi (Termasuk Status Ready/Habis):</label>
+                <textarea id="desc-${category}-${index}">${p.desc.replace(/<br>/g, '\n')}</textarea>
+
+                <button class="action-btn delete-btn" onclick="deleteProduct('${category}', ${index})">Hapus</button>
+                <button class="action-btn update-btn" onclick="updateProduct('${category}', ${index})">Simpan Perubahan</button>
+            `;
+            list.appendChild(item);
         });
     }
 
-    // =======================================================
-    // 1. MANAJEMEN KATEGORI
-    // =======================================================
-    
-    function toggleAddCategoryForm() {
-        const form = document.getElementById('add-category-form');
-        form.style.display = form.style.display === 'block' ? 'none' : 'block';
-    }
-    
-    function renderCategoryDetails() {
-        const catId = document.getElementById('admin-category-select-manage').value;
-        const cat = categoriesData.find(c => c.id === catId);
-        
-        if (cat) {
-            document.getElementById('edit-cat-id').value = cat.id;
-            document.getElementById('edit-cat-name').value = cat.name;
-            document.getElementById('edit-cat-color').value = cat.color;
-            document.getElementById('edit-cat-icon').value = cat.icon_url;
-            document.getElementById('edit-cat-order').value = cat.category_order;
-            document.getElementById('edit-cat-active').value = cat.is_active.toString();
-        }
+    // Update produk yang sudah ada
+    function updateProduct(category, index) {
+        const newName = document.getElementById(`name-${category}-${index}`).value;
+        const newPrice = parseInt(document.getElementById(`price-${category}-${index}`).value);
+        // Mengganti newline (\n) dari textarea kembali ke tag <br> untuk HTML
+        const newDesc = document.getElementById(`desc-${category}-${index}`).value.replace(/\n/g, '<br>');
 
-        // Sinkronkan dropdown produk ke kategori yang sedang diedit
-        document.getElementById('admin-category-select').value = catId;
-        renderAdminProducts();
-    }
-    
-    async function addCategory() {
-        const name = document.getElementById('new-cat-name').value;
-        const color = document.getElementById('new-cat-color').value;
-        const icon = document.getElementById('new-cat-icon').value;
-        const order = parseInt(document.getElementById('new-cat-order').value);
-
-        if (!name || isNaN(order)) { alert('Nama dan Urutan Kategori harus diisi.'); return; }
-
-        // SIMULASI API POST
-        alert(`Kategori baru: ${name} (Urutan: ${order}). Fungsi 'Tambah Kategori' siap diimplementasikan dengan API POST ke ${API_CATEGORY_URL}`);
-        await fetchData(); 
-    }
-    
-    async function updateCategory() {
-        const catId = document.getElementById('edit-cat-id').value;
-        const data = {
-            id: catId,
-            name: document.getElementById('edit-cat-name').value,
-            color: document.getElementById('edit-cat-color').value,
-            icon_url: document.getElementById('edit-cat-icon').value,
-            category_order: parseInt(document.getElementById('edit-cat-order').value),
-            is_active: document.getElementById('edit-cat-active').value === 'true'
-        };
-
-        if (!data.name || isNaN(data.category_order)) { alert('Nama dan Urutan harus valid.'); return; }
-        
-        // SIMULASI API PUT
-        alert(`Kategori ${data.name} (ID: ${catId}) diupdate. Status Aktif: ${data.is_active}. Fungsi 'Update Kategori' siap diimplementasikan dengan API PUT ke ${API_CATEGORY_URL}`);
-        await fetchData(); 
-    }
-    
-    async function deleteCategory() {
-        const catId = document.getElementById('edit-cat-id').value;
-        const catName = document.getElementById('edit-cat-name').value;
-        if (!confirm(`Yakin ingin menghapus kategori: ${catName} dan SEMUA produk di dalamnya secara PERMANEN?`)) return;
-        
-        // SIMULASI API DELETE
-        alert(`Kategori ${catName} (ID: ${catId}) dihapus. Fungsi 'Hapus Kategori' siap diimplementasikan dengan API DELETE ke ${API_CATEGORY_URL}`);
-        await fetchData(); 
-    }
-
-    // =======================================================
-    // 2. MANAJEMEN PRODUK
-    // =======================================================
-
-    function toggleAddProductForm() {
-        const form = document.getElementById('add-product-container');
-        form.style.display = form.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function renderAdminProducts() {
-        const categoryId = document.getElementById('admin-category-select').value;
-        const categoryName = categoriesData.find(c => c.id === categoryId)?.name || 'N/A';
-        document.getElementById('editing-category-name').textContent = categoryName;
-        document.getElementById('selected-add-category').textContent = categoryName;
-
-        const list = document.getElementById('admin-products-list');
-        list.innerHTML = '';
-        
-        const productsList = products[categoryId] || [];
-        productsList.sort((a, b) => a.product_order - b.product_order); // Urutkan Tampil Produk
-
-        if (productsList.length > 0) {
-            productsList.forEach((p) => {
-                const item = document.createElement('div');
-                item.className = 'admin-product-item';
-                
-                item.innerHTML = `
-                    <label style="color:#007aff;">ID Database: ${p.id}</label>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <label style="margin:0;">Nama Produk:</label>
-                        <label style="margin:0;">Urutan: <input type="number" id="order-${p.id}" value="${p.product_order}" style="width: 50px; display: inline-block; padding: 3px; margin: 0;"></label>
-                    </div>
-                    <input type="text" id="name-${p.id}" value="${p.name}" />
-
-                    <label>Harga:</label>
-                    <input type="number" id="price-${p.id}" value="${p.price}" />
-                    
-                    <label>URL Gambar:</label>
-                    <input type="text" id="image-${p.id}" value="${p.image_url || ''}" />
-                    
-                    <div class="admin-status-control">
-                        <label>Status Stok:</label>
-                        <select id="status-${p.id}">
-                            <option value="ready" ${p.stock_status === 'ready' ? 'selected' : ''}>✅ Ready</option>
-                            <option value="habis" ${p.stock_status === 'habis' ? 'selected' : ''}>❌ Habis</option>
-                            <option value="gangguan" ${p.stock_status === 'gangguan' ? 'selected' : ''}>⚠️ Gangguan</option>
-                        </select>
-                        <label style="margin:0;">Aktif:</label>
-                        <select id="active-${p.id}">
-                            <option value="true" ${p.is_active === true ? 'selected' : ''}>✅ Aktif</option>
-                            <option value="false" ${p.is_active === false ? 'selected' : ''}>❌ Nonaktif</option>
-                        </select>
-                    </div>
-
-                    <label>Deskripsi:</label>
-                    <textarea id="desc-${p.id}">${p.description.replace(/<br>/g, '\n')}</textarea>
-
-                    <button class="action-btn delete-btn" onclick="deleteProduct('${p.id}')">Hapus Permanen</button>
-                    <button class="action-btn update-btn" onclick="updateProduct('${p.id}')">Simpan Perubahan Permanen</button>
-                `;
-                list.appendChild(item);
-            });
+        if (newName && !isNaN(newPrice) && newDesc) {
+            products[category][index].name = newName;
+            products[category][index].price = newPrice;
+            products[category][index].desc = newDesc;
+            
+            renderAdminProducts();
+            if (activeCategory === category) {
+                // Refresh tampilan user
+                toggleProducts(category);
+                toggleProducts(category); 
+            }
+            alert('Produk berhasil diupdate (sementara)!');
         } else {
-            list.innerHTML = `<p>Tidak ada produk untuk kategori ${categoryName}. Tambahkan produk baru di atas.</p>`;
+            alert('Semua kolom harus diisi dengan benar.');
         }
     }
 
-    async function updateProduct(id) {
-        const categoryId = document.getElementById('admin-category-select').value;
-        const data = {
-            id: id,
-            category_id: categoryId,
-            name: document.getElementById(`name-${id}`).value,
-            price: parseInt(document.getElementById(`price-${id}`).value),
-            image_url: document.getElementById(`image-${id}`).value,
-            product_order: parseInt(document.getElementById(`order-${id}`).value),
-            is_active: document.getElementById(`active-${id}`).value === 'true',
-            stock_status: document.getElementById(`status-${id}`).value,
-            description: document.getElementById(`desc-${id}`).value.replace(/\n/g, '<br>')
-        };
-        
-        if (!data.name || isNaN(data.price)) { alert('Nama dan Harga harus valid.'); return; }
-        
-        // SIMULASI API PUT
-        alert(`Produk ID: ${id} diupdate. Status Stok: ${data.stock_status}, Urutan: ${data.product_order}. Fungsi 'Update Produk' siap diimplementasikan dengan API PUT ke ${API_URL}`);
-        await fetchData();
-    }
-
-    async function deleteProduct(id) {
-        if (!confirm(`Yakin ingin menghapus Produk ID: ${id} secara PERMANEN?`)) return;
-        
-        // SIMULASI API DELETE
-        alert(`Produk ID: ${id} dihapus. Fungsi 'Hapus Produk' siap diimplementasikan dengan API DELETE ke ${API_URL}`);
-        await fetchData();
-    }
-
-    async function addNewProduct() {
-        const categoryId = document.getElementById('admin-category-select').value;
-        const data = {
-            category_id: categoryId,
-            name: document.getElementById('new-product-name').value,
-            price: parseInt(document.getElementById('new-product-price').value),
-            image_url: document.getElementById('new-product-image').value,
-            product_order: parseInt(document.getElementById('new-product-order').value),
-            // Default status untuk produk baru
-            is_active: true, 
-            stock_status: 'ready', 
-            description: document.getElementById('new-product-desc').value.replace(/\n/g, '<br>')
-        };
-
-        if (!data.name || isNaN(data.price) || !data.description || isNaN(data.product_order)) {
-            alert('Nama, Harga, Deskripsi, dan Urutan harus diisi.');
-            return;
+    // Hapus produk
+    function deleteProduct(category, index) {
+        if (confirm(`Yakin ingin menghapus ${products[category][index].name}?`)) {
+            products[category].splice(index, 1);
+            
+            renderAdminProducts();
+            if (activeCategory === category) {
+                toggleProducts(category);
+                toggleProducts(category); 
+            }
+            alert('Produk berhasil dihapus (sementara)!');
         }
+    }
 
-        // SIMULASI API POST
-        alert(`Produk baru: ${data.name} ditambahkan ke Kategori ID: ${categoryId}. Fungsi 'Tambah Produk' siap diimplementasikan dengan API POST ke ${API_URL}`);
-        
-        // Reset form
-        document.getElementById('new-product-name').value = '';
-        document.getElementById('new-product-price').value = '';
-        document.getElementById('new-product-image').value = '';
-        document.getElementById('new-product-desc').value = '';
-        document.getElementById('new-product-order').value = 10;
-        
-        await fetchData();
+    // Tambah produk baru
+    function addNewProduct() {
+        const category = document.getElementById('admin-category-select').value;
+        const newName = document.getElementById('new-product-name').value;
+        const newPrice = parseInt(document.getElementById('new-product-price').value);
+        // Mengganti newline (\n) dari textarea kembali ke tag <br> untuk HTML
+        const newDesc = document.getElementById('new-product-desc').value.replace(/\n/g, '<br>');
+
+        if (newName && !isNaN(newPrice) && newDesc) {
+            products[category].push({
+                name: newName,
+                price: newPrice,
+                desc: newDesc
+            });
+
+            // Reset form
+            document.getElementById('new-product-name').value = '';
+            document.getElementById('new-product-price').value = '';
+            document.getElementById('new-product-desc').value = '';
+
+            renderAdminProducts();
+            if (activeCategory === category) {
+                toggleProducts(category);
+                toggleProducts(category);
+            }
+            alert('Produk baru berhasil ditambahkan (sementara)!');
+        } else {
+            alert('Nama, Harga, dan Deskripsi harus diisi.');
+        }
     }
   </script>
 </body>
