@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NetHub Digital | Toko Kuota Internet</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Roboto:wght@400;500&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg, #f9fafc 0%, #eef1f6 100%);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      transition: background 0.3s ease;
+    }
+
+    header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      background: linear-gradient(90deg, #ffffff, #f8f9fb);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      border-radius: 15px;
+      padding: 15px 20px;
+      transition: 0.3s;
+      max-width: 600px;
+      cursor: pointer;
+    }
+
+    .logo-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #007aff;
+      letter-spacing: 0.5px;
+    }
+
+    .main-content {
+        display: flex;
+        flex-direction: column; 
+        width: 100%;
+        max-width: 600px; 
+        gap: 20px;
+        align-items: center;
+    }
+
+    .category-container {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      width: 100%;
+      flex-shrink: 0;
+      justify-content: center;
+    }
+
+    .category {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      padding: 15px 10px;
+      cursor: pointer;
+      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+      background: #ffffff;
+      color: #333;
+      border: 1px solid #eee;
+      width: 120px;
+    }
+    
+    .category.active {
+        background-color: #e6f0ff;
+        border-color: #007aff;
+    }
+    /* Style untuk kategori yang nonaktif */
+    .category.inactive {
+        opacity: 0.5;
+        border-style: dashed;
+    }
+
+    .category img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-bottom: 5px;
+      margin-right: 0;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+    }
+
+    .category h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      margin-top: 0;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    
+    .product-utility-link {
+        display: block;
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        background: #f0f7ff;
+        border: 1px solid #d0e4ff;
+        border-radius: 10px;
+        color: #007aff;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 122, 255, 0.1);
+    }
+
+    .product-list {
+      display: none;
+      width: 100%; 
+      max-width: 600px; 
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .product-card {
+      background: #ffffff;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      padding: 25px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      border-left: 5px solid #007aff;
+      transition: 0.3s;
+      position: relative;
+    }
+    
+    /* Style untuk produk nonaktif */
+    .product-card.inactive {
+        opacity: 0.6;
+        filter: grayscale(100%);
+    }
+
+    .product-card h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .product-card h4 span {
+        color: #007aff;
+        font-weight: 600;
+    }
+    
+    /* Status Labels */
+    .status-tag {
+        font-weight: 600;
+        margin-right: 8px;
+        font-size: 0.95rem;
+    }
+    .status-ready { color: #28a745; }
+    .status-habis { color: #f44336; }
+    .status-gangguan { color: #ff9800; }
+    
+    .product-card p {
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .product-card strong {
+        color: #e91e63;
+        font-size: 1.1rem;
+    }
+
+    .buy-btn {
+      background: #007aff;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 122, 255, 0.4);
+    }
+    .product-card.inactive .buy-btn {
+        background: #999;
+        cursor: not-allowed;
+    }
+
+    /* === ADMIN PANEL STYLES === */
+    #admin-panel {
+        display: none; 
+        width: 100%;
+        max-width: 700px;
+        margin-top: 40px;
+        padding: 20px;
+        background: #fff8e1;
+        border: 2px solid #ffcc80;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(255, 160, 0, 0.2);
+    }
+    #admin-panel h2 {
+        color: #ff9800;
+        border-bottom: 2px solid #ffe0b2;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+    }
+    #admin-panel h3 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.2rem;
+        color: #ff9800;
+        margin-top: 20px;
+    }
+    #admin-panel label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+        color: #555;
+    }
+    #admin-panel input[type="text"], 
+    #admin-panel input[type="number"], 
+    #admin-panel textarea,
+    #admin-panel select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    #admin-panel textarea {
+        height: 80px;
+    }
+    #admin-panel button.action-btn {
+        padding: 10px 15px;
+        margin-right: 10px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.2s;
+    }
+    .add-btn { background: #4CAF50; color: white; }
+    .delete-btn { background: #f44336; color: white; }
+    .update-btn { background: #2196F3; color: white; }
+    .section-separator {
+        border-top: 1px dashed #ffcc80;
+        margin: 20px 0;
+        padding-top: 10px;
+    }
+    .admin-product-item {
+        border: 1px solid #ffe0b2;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        background: #ffffff;
+    }
+    .admin-status-control {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    .admin-status-control select {
+        width: auto;
+        flex-grow: 1;
+        margin: 0;
+    }
+    .admin-status-control label {
+        margin: 0;
+    }
+
+    #add-product-container, #add-category-form {
+        display: none;
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 10px;
+        background: #f9f9f9;
+        margin-top: 15px;
+    }
+    /* === END ADMIN PANEL STYLES === */
+
+    /* === MODAL STYLES === */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .qr-image {
+      margin-top: 15px;
+      border-radius: 10px;
+      width: 220px;
+      height: 220px;
+    }
+
+    .close-btn {
+      margin-top: 10px;
+      background: none;
+      border: none;
+      color: #007aff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header id="main-header">
+    <div class="logo-text">⚡ NetHub Digital</div>
+  </header>
+
+  <div class="main-content">
+    <section class="category-container" id="category-container">
+      </section>
+
+    <section id="productSection" class="product-list">
+        </section>
+  </div>
+
+  <div id="admin-panel">
+    <h2>🔑 Panel Admin (Full Management)</h2>
+    <p style="color:green; font-weight: bold;">✅ Perubahan akan disimpan permanen di Database.</p>
+    
+    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+        <button class="action-btn update-btn" onclick="fetchData()" style="flex-grow: 1;">🔄 Refresh Data dari Database</button>
+    </div>
+
+    <h3 style="margin-top:25px; color:#007aff;">⚙️ Manajemen Kategori</h3>
+    <div id="category-management-container" style="padding:15px; border:1px solid #d0e4ff; border-radius:10px; background:#f0f7ff;">
+        
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+            <label for="admin-category-select-manage" style="margin: 0; align-self: center;">Pilih Kategori:</label>
+            <select id="admin-category-select-manage" onchange="renderCategoryDetails()" style="width: 150px; margin: 0;"></select>
+            <button class="action-btn add-btn" onclick="toggleAddCategoryForm()" style="padding: 8px 12px;">+ Kategori Baru</button>
+        </div>
+
+        <div id="add-category-form">
+            <h4>Tambah Kategori Baru</h4>
+            <input type="text" id="new-cat-name" placeholder="Nama Kategori (misal: Telkomsel)" />
+            <input type="text" id="new-cat-color" placeholder="Warna (misal: #007aff)" />
+            <input type="text" id="new-cat-icon" placeholder="URL Icon" />
+            <input type="number" id="new-cat-order" placeholder="Urutan Tampil (angka)" />
+            <button class="action-btn add-btn" onclick="addCategory()">Tambah Kategori Permanen</button>
+        </div>
+        
+        <div id="category-details" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: white; margin-top: 15px;">
+            <h4>Edit Kategori Terpilih</h4>
+            <label>ID Kategori:</label><input type="text" id="edit-cat-id" disabled style="background: #eee;"/>
+            <label>Nama:</label><input type="text" id="edit-cat-name" />
+            <label>Warna:</label><input type="text" id="edit-cat-color" />
+            <label>Icon URL:</label><input type="text" id="edit-cat-icon" />
+            <label>Urutan:</label><input type="number" id="edit-cat-order" />
+            
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <label style="margin:0;">Status Kategori (Aktif/Nonaktif):</label>
+                <select id="edit-cat-active" style="width: auto; flex-grow:1; margin:0;">
+                    <option value="true">✅ Aktif</option>
+                    <option value="false">❌ Nonaktif (Sembunyikan Semua Produk)</option>
+                </select>
+            </div>
+
+            <button class="action-btn update-btn" onclick="updateCategory()">Simpan Perubahan Kategori</button>
+            <button class="action-btn delete-btn" onclick="deleteCategory()">Hapus Kategori & Produk</button>
+        </div>
+    </div>
+
+
+    <div class="section-separator"></div>
+
+    <h3 style="color:#007aff;">📦 Manajemen Produk Kategori (<span id="editing-category-name">...</span>)</h3>
+    
+    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+        <label for="admin-category-select" style="margin: 0;">Kelola Kategori:</label>
+        <select id="admin-category-select" onchange="renderAdminProducts()" style="width: 150px; margin: 0;"></select>
+        <button class="action-btn add-btn" onclick="toggleAddProductForm()" style="flex-grow: 1;">+ Tambah Produk</button>
+    </div>
+
+    <div id="add-product-container">
+        <h4>Tambah Produk ke Kategori <strong id="selected-add-category">...</strong></h4>
+        <label for="new-product-name">Nama Produk:</label>
+        <input type="text" id="new-product-name" placeholder="Contoh: XL 10GB" />
+
+        <label for="new-product-price">Harga (Rp):</label>
+        <input type="number" id="new-product-price" />
+        
+        <label for="new-product-image">URL Gambar (Opsional):</label>
+        <input type="text" id="new-product-image" placeholder="https://..." />
+
+        <label for="new-product-desc">Deskripsi:</label>
+        <textarea id="new-product-desc" placeholder="Contoh: Masa aktif 30 hari."></textarea>
+        
+        <label for="new-product-order">Urutan Tampil (Angka):</label>
+        <input type="number" id="new-product-order" placeholder="1, 2, 3, ..." value="10" />
+
+        <button class="action-btn add-btn" onclick="addNewProduct()">Simpan Produk Permanen</button>
+    </div>
+
+    <div class="section-separator"></div>
+    <h4>Daftar Produk yang Tersimpan</h4>
+    <div id="admin-products-list">
+      <p>Pilih kategori di atas untuk memuat daftar produk.</p>
+    </div>
+
+    <div class="section-separator"></div>
+    <button class="action-btn update-btn" onclick="hideAdminPanel()">Sembunyikan Panel</button>
+  </div>
+  
+  <div id="paymentModal" class="modal">
+    <div class="modal-content" id="modalContent">
+      </div>
+  </div>
+  
+  <br><br><br><br><br><br><br>
+  <footer>
+    Butuh bantuan? Hubungi <a href="https://wa.me/6285751817154" target="_blank">Admin</a><br>
+    © 2024 NetHub Digital. Semua Hak Dilindungi.
+  </footer>
+
+  <script>
+    // =======================================================
+    // PENGATURAN GLOBAL DAN KONEKSI API
+    // =======================================================
+
+    // !!! GANTI INI DENGAN URL VERCEL ANDA YANG SESUNGGUHNYA !!!
+    const BASE_URL = 'https://[VERCEL_API_URL].vercel.app'; 
+    const API_URL = `${BASE_URL}/api/products`; 
+    const API_CATEGORY_URL = `${BASE_URL}/api/categories`; 
+
+    const ADMIN_PASSWORD = "012529";
+    
+    // Data Kategori Awal (Digunakan jika API Kategori Gagal)
+    let categoriesData = [
+        { id: 'cat-indosat', name: 'Kuota Indosat', icon_url: 'https://iili.io/KyFri8u.png', category_order: 1, is_active: true, color: '#007aff' },
+        { id: 'cat-telkomsel', name: 'Kuota Telkomsel', icon_url: 'https://iili.io/KyF4MAb.png', category_order: 2, is_active: true, color: '#f44336' },
+        { id: 'cat-xl', name: 'Kuota XL Akrab', icon_url: 'https://iili.io/KyF66mb.png', category_order: 3, is_active: true, color: '#ff9800' }
+    ];
+
+    // Data produk awal (SEED DATA) - DATA LENGKAP
+    const SEED_PRODUCTS = {
+        'cat-indosat': [
+            { id: 101, name: 'Indosat 50GB', price: 55000, description: '- Kuota Aktif 28 Hari\n- Jaringan 4G/5G\n- Proses cepat otomatis', product_order: 1, is_active: true, stock_status: 'ready', image_url: '' },
+            { id: 102, name: 'Indosat 80GB', price: 95000, description: '- Kuota Aktif 30 Hari\n- Jaringan 4G/5G\n- Proses cepat otomatis', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' }
+        ],
+        'cat-telkomsel': [
+            { id: 201, name: 'Telkomsel 30GB', price: 65000, description: '- Kuota Nasional aktif 30 hari\n- Berlaku semua jaringan\n- Aktivasi instan', product_order: 1, is_active: true, stock_status: 'ready', image_url: '' },
+            { id: 202, name: 'Telkomsel 80GB', price: 120000, description: '- Kuota Nasional aktif 30 hari\n- Bonus tambahan 5GB YouTube', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' }
+        ],
+        'cat-xl': [
+            { id: 301, name: 'XL SUPERMINI', price: 39000, description: 'Masa aktif: 27/28 hari\n- AREA 1: 13–15 GB\n- AREA 4: 30–32 GB', product_order: 1, is_active: true, stock_status: 'habis', image_url: '' },
+            { id: 302, name: 'XL MINI', price: 50000, description: 'Masa aktif: 27/28 hari\n- AREA 1: 32–34 GB\n- AREA 4: 49–51 GB', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' },
+            { id: 303, name: 'XL AKRAB 1', price: 60000, description: '- Kuota utama 10GB\n- 4 Member\n- Masa Aktif 30 hari', product_order: 3, is_active: true, stock_status: 'ready', image_url: '' },
+            { id: 304, name: 'XL AKRAB 2', price: 80000, description: '- Kuota utama 25GB\n- 4 Member\n- Masa Aktif 30 hari', product_order: 4, is_active: true, stock_status: 'ready', image_url: '' },
+            { id: 305, name: 'XL AKRAB 3', price: 100000, description: '- Kuota utama 40GB\n- 4 Member\n- Masa Aktif 30 hari', product_order: 5, is_active: true, stock_status: 'ready', image_url: '' }
+        ]
+    };
+
+
+    let products = {}; 
+    let activeCategory = null;
+    let dataFetched = false; 
+    
+    // =======================================================
+    // FUNGSI UTILITY & UI
+    // =======================================================
+
+    function getStatusTag(status) {
+        if (status === 'habis') {
+            return "<span class='status-tag status-habis'>❌ Habis</span>";
+        } else if (status === 'gangguan') {
+            return "<span class='status-tag status-gangguan'>⚠️ Gangguan</span>";
+        }
+        return "<span class='status-tag status-ready'>✅ Ready Stock</span>";
+    }
+
+    function showLoading(show) {
+        const section = document.getElementById('productSection');
+        if (show) {
+             section.innerHTML = '<h4>Memuat data dari database...</h4>';
+             section.style.display = 'block';
+        } else if (section.innerHTML.includes('Memuat data')) {
+             section.innerHTML = '';
+        }
+    }
+
+    // =======================================================
+    // FUNGSI FETCH DATA DARI API (2 ENDPOINT)
+    // =======================================================
+
+    async function fetchData() {
+        showLoading(true);
+        try {
+            // 1. Fetch Categories
+            const catResponse = await fetch(API_CATEGORY_URL);
+            if (catResponse.ok) {
+                categoriesData = await catResponse.json();
+                categoriesData.sort((a, b) => a.category_order - b.category_order);
+            } else {
+                 console.warn("Gagal fetch kategori dari API. Menggunakan data SEED Kategori.");
+            }
+            
+            // 2. Fetch Products
+            const prodResponse = await fetch(API_URL);
+            if (prodResponse.ok) {
+                // Asumsi API produk mengembalikan objek { 'category-id': [produk], ... }
+                products = await prodResponse.json(); 
+            } else {
+                 console.warn("Gagal fetch produk dari API. Menggunakan data SEED Produk.");
+                 products = SEED_PRODUCTS;
+            }
+            
+            dataFetched = true;
+            showLoading(false);
+            
+            // Render UI Setelah Data Diperoleh
+            renderCategoriesToUserInterface();
+            if (document.getElementById('admin-panel').style.display === 'block') {
+                populateAdminCategoriesDropdowns();
+                renderCategoryDetails();
+            }
+            
+        } catch (e) {
+            console.error('API FETCH ERROR:', e);
+            products = SEED_PRODUCTS; // Fallback ke SEED
+            dataFetched = true;
+            showLoading(false);
+            renderCategoriesToUserInterface();
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', fetchData);
+
+    // =======================================================
+    // FUNGSI FRONTEND USER (Tampilan Toko)
+    // =======================================================
+    
+    function renderCategoriesToUserInterface() {
+        const container = document.getElementById('category-container');
+        container.innerHTML = '';
+        
+        categoriesData.forEach(cat => {
+            if (!cat.is_active) return; // Sembunyikan jika kategori nonaktif
+            
+            const div = document.createElement('div');
+            div.className = 'category';
+            div.id = `cat-${cat.id}`;
+            div.style.borderLeft = `5px solid ${cat.color}`;
+            div.onclick = () => toggleProducts(cat.id);
+            
+            div.innerHTML = `
+                <img src="${cat.icon_url}" alt="${cat.name}" />
+                <h3>${cat.name}</h3>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    async function toggleProducts(categoryId) {
+        const section = document.getElementById('productSection');
+        const allCategories = document.querySelectorAll('.category');
+        const currentCategoryElement = document.getElementById(`cat-${categoryId}`);
+        const category = categoriesData.find(c => c.id === categoryId);
+
+        if (!dataFetched) { await fetchData(); }
+        if (!category || !category.is_active) return;
+
+        if (activeCategory === categoryId) {
+            section.style.display = 'none';
+            currentCategoryElement.classList.remove('active');
+            activeCategory = null;
+            return; 
+        }
+
+        activeCategory = categoryId;
+        allCategories.forEach(cat => cat.classList.remove('active'));
+        currentCategoryElement.classList.add('active');
+
+        section.innerHTML = '';
+        
+        // Tambahkan Tombol Cek Area XL
+        if (categoryId === 'cat-xl') {
+            const checkAreaLink = document.createElement('a');
+            checkAreaLink.href = "https://raw.githack.com/vieralola/Cekareaviera.html/main/Cekareaviera.html";
+            checkAreaLink.target = "_blank";
+            checkAreaLink.className = "product-utility-link";
+            checkAreaLink.textContent = "🗺️ Klik Di Sini Untuk Cek Area XL Akrab";
+            section.appendChild(checkAreaLink);
+        }
+
+        const productsList = products[categoryId] || [];
+        productsList.sort((a, b) => a.product_order - b.product_order); // Urutkan
+
+        if (productsList.length > 0) {
+            productsList.forEach(p => {
+                // Hanya tampilkan produk yang is_active = true
+                if (!p.is_active) return; 
+                
+                const div = document.createElement('div');
+                div.className = 'product-card';
+                div.style.borderLeft = `5px solid ${category.color}`;
+                
+                const statusTag = getStatusTag(p.stock_status); 
+                const descHtml = (p.description || '').replace(/\n/g, '<br>');
+                const isDisabled = p.stock_status !== 'ready';
+
+                if (isDisabled) {
+                    div.classList.add('inactive');
+                }
+
+                div.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h4><span>${p.name}</span></h4>
+                        ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" style="width: 40px; height: 40px; border-radius: 5px; object-fit: cover;">` : ''}
+                    </div>
+                    <p>${statusTag} ${descHtml}</p>
+                    <p><strong>Harga: Rp ${p.price.toLocaleString()}</strong></p>
+                    <button class='buy-btn' ${isDisabled ? 'disabled' : ''} onclick='${isDisabled ? '' : `openModal(${p.price})`}'>
+                        ${isDisabled ? 'Stok Tidak Tersedia' : 'Beli Sekarang'}
+                    </button>
+                `;
+                section.appendChild(div);
+            });
+        } else {
+            section.innerHTML = `<h4>Tidak ada produk aktif di kategori ${category.name}.</h4>`;
+        }
+        
+        section.style.display = 'block';
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // =======================================================
+    // FUNGSI MODAL PEMBAYARAN (TETAP)
+    // =======================================================
+
+    let selectedPrice = 0;
+
+    function openModal(price) {
+        selectedPrice = price;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent('00020101021126670016COM.NOBUBANK.WWW01189360050300000907180214531277541631500303UMI51440014ID.CO.QRIS.WWW0215ID20254466748920303UMI5204481253033605802ID5914Pulsa CELLULAR6009INDONESIA61059024262070703A0163045CAF')}&size=220x220`;
+
+        document.getElementById('modalContent').innerHTML = `
+            <h3>Masukkan Nomor HP</h3>
+            <input type='number' id='phoneNumber' placeholder='08xxxxxxxxxx' />
+            <button class='buy-btn' onclick='showQR("${qrUrl}")'>Bayar Sekarang</button>
+            <button class='close-btn' onclick='closeModal()'>Batal</button>
+        `;
+        document.getElementById('paymentModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    function showQR(qrUrl) {
+        const modal = document.getElementById('modalContent');
+        const phone = document.getElementById('phoneNumber').value;
+
+        if (!phone || phone.length < 8) {
+            alert('Masukkan nomor HP yang valid terlebih dahulu!');
+            return;
+        }
+        
+        modal.innerHTML = `
+            <h3>Pembayaran</h3>
+            <p>Nominal: <strong>Rp ${selectedPrice.toLocaleString()}</strong></p>
+            <p>Tujuan: <strong>${phone}</strong></p>
+            <p>Silakan transfer menggunakan QRIS di bawah ini:</p>
+            <img class='qr-image' src='${qrUrl}' alt='QRIS' />
+            <p style='margin-top:10px;font-size:0.9rem;color:#555'>Setelah transfer, pesanan akan otomatis diproses.</p>
+            <button class='close-btn' onclick='closeModal()'>Tutup</button>
+        `;
+    }
+
+
+    // =======================================================
+    // FUNGSI ADMIN PANEL (CORE)
+    // =======================================================
+    
+    document.getElementById('main-header').addEventListener('dblclick', promptAdminPassword);
+    
+    function promptAdminPassword() {
+        if (!dataFetched) {
+            alert("Harap tunggu, data produk sedang dimuat. Coba lagi dalam 5 detik.");
+            return;
+        }
+        
+        const panel = document.getElementById('admin-panel');
+        if (panel.style.display === 'block') {
+            hideAdminPanel();
+            return;
+        }
+
+        const password = prompt("Masukkan Sandi Admin:");
+
+        if (password === ADMIN_PASSWORD) {
+            showAdminPanel();
+        } else if (password !== null) {
+            alert("Sandi salah. Akses ditolak.");
+        }
+    }
+
+    function showAdminPanel() {
+        document.getElementById('admin-panel').style.display = 'block';
+        populateAdminCategoriesDropdowns();
+        renderCategoryDetails(); // Otomatis merender produk pertama
+    }
+
+    function hideAdminPanel() {
+        document.getElementById('admin-panel').style.display = 'none';
+    }
+    
+    function populateAdminCategoriesDropdowns() {
+        const selectProduct = document.getElementById('admin-category-select');
+        const selectManage = document.getElementById('admin-category-select-manage');
+        
+        [selectProduct, selectManage].forEach(select => {
+            select.innerHTML = '';
+            categoriesData.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id; 
+                option.textContent = cat.name;
+                if (!cat.is_active) {
+                    option.textContent += ' (Nonaktif)';
+                }
+                select.appendChild(option);
+            });
+        });
+    }
+
+    // =======================================================
+    // 1. MANAJEMEN KATEGORI
+    // =======================================================
+    
+    function toggleAddCategoryForm() {
+        const form = document.getElementById('add-category-form');
+        form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+    
+    function renderCategoryDetails() {
+        const catId = document.getElementById('admin-category-select-manage').value;
+        const cat = categoriesData.find(c => c.id === catId);
+        
+        if (cat) {
+            document.getElementById('edit-cat-id').value = cat.id;
+            document.getElementById('edit-cat-name').value = cat.name;
+            document.getElementById('edit-cat-color').value = cat.color;
+            document.getElementById('edit-cat-icon').value = cat.icon_url;
+            document.getElementById('edit-cat-order').value = cat.category_order;
+            document.getElementById('edit-cat-active').value = cat.is_active.toString();
+        }
+
+        // Sinkronkan dropdown produk ke kategori yang sedang diedit
+        document.getElementById('admin-category-select').value = catId;
+        renderAdminProducts();
+    }
+    
+    async function addCategory() {
+        const name = document.getElementById('new-cat-name').value;
+        const color = document.getElementById('new-cat-color').value;
+        const icon = document.getElementById('new-cat-icon').value;
+        const order = parseInt(document.getElementById('new-cat-order').value);
+
+        if (!name || isNaN(order)) { alert('Nama dan Urutan Kategori harus diisi.'); return; }
+
+        // SIMULASI API POST
+        alert(`Kategori baru: ${name} (Urutan: ${order}). Fungsi 'Tambah Kategori' siap diimplementasikan dengan API POST ke ${API_CATEGORY_URL}`);
+        await fetchData(); 
+    }
+    
+    async function updateCategory() {
+        const catId = document.getElementById('edit-cat-id').value;
+        const data = {
+            id: catId,
+            name: document.getElementById('edit-cat-name').value,
+            color: document.getElementById('edit-cat-color').value,
+            icon_url: document.getElementById('edit-cat-icon').value,
+            category_order: parseInt(document.getElementById('edit-cat-order').value),
+            is_active: document.getElementById('edit-cat-active').value === 'true'
+        };
+
+        if (!data.name || isNaN(data.category_order)) { alert('Nama dan Urutan harus valid.'); return; }
+        
+        // SIMULASI API PUT
+        alert(`Kategori ${data.name} (ID: ${catId}) diupdate. Status Aktif: ${data.is_active}. Fungsi 'Update Kategori' siap diimplementasikan dengan API PUT ke ${API_CATEGORY_URL}`);
+        await fetchData(); 
+    }
+    
+    async function deleteCategory() {
+        const catId = document.getElementById('edit-cat-id').value;
+        const catName = document.getElementById('edit-cat-name').value;
+        if (!confirm(`Yakin ingin menghapus kategori: ${catName} dan SEMUA produk di dalamnya secara PERMANEN?`)) return;
+        
+        // SIMULASI API DELETE
+        alert(`Kategori ${catName} (ID: ${catId}) dihapus. Fungsi 'Hapus Kategori' siap diimplementasikan dengan API DELETE ke ${API_CATEGORY_URL}`);
+        await fetchData(); 
+    }
+
+    // =======================================================
+    // 2. MANAJEMEN PRODUK
+    // =======================================================
+
+    function toggleAddProductForm() {
+        const form = document.getElementById('add-product-container');
+        form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function renderAdminProducts() {
+        const categoryId = document.getElementById('admin-category-select').value;
+        const categoryName = categoriesData.find(c => c.id === categoryId)?.name || 'N/A';
+        document.getElementById('editing-category-name').textContent = categoryName;
+        document.getElementById('selected-add-category').textContent = categoryName;
+
+        const list = document.getElementById('admin-products-list');
+        list.innerHTML = '';
+        
+        const productsList = products[categoryId] || [];
+        productsList.sort((a, b) => a.product_order - b.product_order); // Urutkan Tampil Produk
+
+        if (productsList.length > 0) {
+            productsList.forEach((p) => {
+                const item = document.createElement('div');
+                item.className = 'admin-product-item';
+                
+                item.innerHTML = `
+                    <label style="color:#007aff;">ID Database: ${p.id}</label>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <label style="margin:0;">Nama Produk:</label>
+                        <label style="margin:0;">Urutan: <input type="number" id="order-${p.id}" value="${p.product_order}" style="width: 50px; display: inline-block; padding: 3px; margin: 0;"></label>
+                    </div>
+                    <input type="text" id="name-${p.id}" value="${p.name}" />
+
+                    <label>Harga:</label>
+                    <input type="number" id="price-${p.id}" value="${p.price}" />
+                    
+                    <label>URL Gambar:</label>
+                    <input type="text" id="image-${p.id}" value="${p.image_url || ''}" />
+                    
+                    <div class="admin-status-control">
+                        <label>Status Stok:</label>
+                        <select id="status-${p.id}">
+                            <option value="ready" ${p.stock_status === 'ready' ? 'selected' : ''}>✅ Ready</option>
+                            <option value="habis" ${p.stock_status === 'habis' ? 'selected' : ''}>❌ Habis</option>
+                            <option value="gangguan" ${p.stock_status === 'gangguan' ? 'selected' : ''}>⚠️ Gangguan</option>
+                        </select>
+                        <label style="margin:0;">Aktif:</label>
+                        <select id="active-${p.id}">
+                            <option value="true" ${p.is_active === true ? 'selected' : ''}>✅ Aktif</option>
+                            <option value="false" ${p.is_active === false ? 'selected' : ''}>❌ Nonaktif</option>
+                        </select>
+                    </div>
+
+                    <label>Deskripsi:</label>
+                    <textarea id="desc-${p.id}">${p.description.replace(/<br>/g, '\n')}</textarea>
+
+                    <button class="action-btn delete-btn" onclick="deleteProduct('${p.id}')">Hapus Permanen</button>
+                    <button class="action-btn update-btn" onclick="updateProduct('${p.id}')">Simpan Perubahan Permanen</button>
+                `;
+                list.appendChild(item);
+            });
+        } else {
+            list.innerHTML = `<p>Tidak ada produk untuk kategori ${categoryName}. Tambahkan produk baru di atas.</p>`;
+        }
+    }
+
+    async function updateProduct(id) {
+        const categoryId = document.getElementById('admin-category-select').value;
+        const data = {
+            id: id,
+            category_id: categoryId,
+            name: document.getElementById(`name-${id}`).value,
+            price: parseInt(document.getElementById(`price-${id}`).value),
+            image_url: document.getElementById(`image-${id}`).value,
+            product_order: parseInt(document.getElementById(`order-${id}`).value),
+            is_active: document.getElementById(`active-${id}`).value === 'true',
+            stock_status: document.getElementById(`status-${id}`).value,
+            description: document.getElementById(`desc-${id}`).value.replace(/\n/g, '<br>')
+        };
+        
+        if (!data.name || isNaN(data.price)) { alert('Nama dan Harga harus valid.'); return; }
+        
+        // SIMULASI API PUT
+        alert(`Produk ID: ${id} diupdate. Status Stok: ${data.stock_status}, Urutan: ${data.product_order}. Fungsi 'Update Produk' siap diimplementasikan dengan API PUT ke ${API_URL}`);
+        await fetchData();
+    }
+
+    async function deleteProduct(id) {
+        if (!confirm(`Yakin ingin menghapus Produk ID: ${id} secara PERMANEN?`)) return;
+        
+        // SIMULASI API DELETE
+        alert(`Produk ID: ${id} dihapus. Fungsi 'Hapus Produk' siap diimplementasikan dengan API DELETE ke ${API_URL}`);
+        await fetchData();
+    }
+
+    async function addNewProduct() {
+        const categoryId = document.getElementById('admin-category-select').value;
+        const data = {
+            category_id: categoryId,
+            name: document.getElementById('new-product-name').value,
+            price: parseInt(document.getElementById('new-product-price').value),
+            image_url: document.getElementById('new-product-image').value,
+            product_order: parseInt(document.getElementById('new-product-order').value),
+            // Default status untuk produk baru
+            is_active: true, 
+            stock_status: 'ready', 
+            description: document.getElementById('new-product-desc').value.replace(/\n/g, '<br>')
+        };
+
+        if (!data.name || isNaN(data.price) || !data.description || isNaN(data.product_order)) {
+            alert('Nama, Harga, Deskripsi, dan Urutan harus diisi.');
+            return;
+        }
+
+        // SIMULASI API POST
+        alert(`Produk baru: ${data.name} ditambahkan ke Kategori ID: ${categoryId}. Fungsi 'Tambah Produk' siap diimplementasikan dengan API POST ke ${API_URL}`);
+        
+        // Reset form
+        document.getElementById('new-product-name').value = '';
+        document.getElementById('new-product-price').value = '';
+        document.getElementById('new-product-image').value = '';
+        document.getElementById('new-product-desc').value = '';
+        document.getElementById('new-product-order').value = 10;
+        
+        await fetchData();
+    }
+  </script>
+</body>
+</html>
