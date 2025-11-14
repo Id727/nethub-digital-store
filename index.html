@@ -22,6 +22,8 @@
       align-items: center;
       padding: 20px;
       transition: background 0.3s ease;
+      /* Menyesuaikan min-height agar footer bisa didorong ke bawah */
+      min-height: 100vh; 
     }
 
     header {
@@ -36,7 +38,7 @@
       padding: 15px 20px;
       transition: 0.3s;
       max-width: 600px;
-      cursor: pointer;
+      /* Dihapus: cursor: pointer; */ 
     }
 
     .logo-text {
@@ -54,6 +56,8 @@
         max-width: 600px; 
         gap: 20px;
         align-items: center;
+        /* Menambahkan flex-grow agar konten mengisi ruang dan mendorong footer */
+        flex-grow: 1; 
     }
 
     .category-container {
@@ -178,70 +182,6 @@
       transition: 0.2s;
       box-shadow: 0 2px 4px rgba(0, 122, 255, 0.4);
     }
-
-    /* === ADMIN PANEL STYLES === */
-    #admin-panel {
-        display: none; 
-        width: 100%;
-        max-width: 600px;
-        margin-top: 40px;
-        padding: 20px;
-        background: #fff8e1;
-        border: 2px solid #ffcc80;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(255, 160, 0, 0.2);
-    }
-    #admin-panel h2 {
-        color: #ff9800;
-        border-bottom: 2px solid #ffe0b2;
-        padding-bottom: 10px;
-        margin-bottom: 15px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.5rem;
-    }
-    #admin-panel label {
-        display: block;
-        margin-top: 10px;
-        font-weight: bold;
-        color: #555;
-    }
-    #admin-panel input[type="text"], 
-    #admin-panel input[type="number"], 
-    #admin-panel textarea,
-    #admin-panel select {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    #admin-panel textarea {
-        height: 80px;
-    }
-    #admin-panel button.action-btn {
-        padding: 10px 15px;
-        margin-right: 10px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    .add-btn { background: #4CAF50; color: white; }
-    .delete-btn { background: #f44336; color: white; }
-    .update-btn { background: #2196F3; color: white; }
-    .section-separator {
-        border-top: 1px dashed #ffcc80;
-        margin: 20px 0;
-        padding-top: 10px;
-    }
-    .admin-product-item {
-        border: 1px solid #ffe0b2;
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 8px;
-        background: #ffffff;
-    }
-    /* === END ADMIN PANEL STYLES === */
 
     /* === MODAL STYLES === */
     .modal {
@@ -377,6 +317,8 @@
       font-size: 0.9rem;
       width: 100%;
       max-width: 900px;
+      /* Memastikan footer berada di bawah */
+      padding-bottom: 20px; 
     }
 
     footer a {
@@ -412,53 +354,18 @@
     <section id="productSection" class="product-list"></section>
   </div>
 
-  <div id="admin-panel">
-    <h2>🔑 Panel Admin (Live Edit)</h2>
-    <p style="color:red; font-weight: bold;">⚠️ Perubahan akan hilang jika halaman di-refresh!</p>
-
-    <label for="admin-category-select">Pilih Kategori:</label>
-    <select id="admin-category-select" onchange="renderAdminProducts()">
-      <option value="indosat">Indosat</option>
-      <option value="telkomsel">Telkomsel</option>
-      <option value="xl">XL Akrab</option>
-    </select>
-
-    <div class="section-separator"></div>
-    <h3>Edit/Hapus Produk</h3>
-    <div id="admin-products-list">
-      </div>
-
-    <div class="section-separator"></div>
-    <h3>Tambah Produk Baru</h3>
-    <div id="add-product-form">
-      <label for="new-product-name">Nama Produk:</label>
-      <input type="text" id="new-product-name" placeholder="Contoh: Indosat 100GB" />
-
-      <label for="new-product-price">Harga (Contoh: 120000):</label>
-      <input type="number" id="new-product-price" />
-
-      <label for="new-product-desc">Deskripsi (Gunakan &lt;br&gt; untuk baris baru):</label>
-      <textarea id="new-product-desc"></textarea>
-
-      <button class="action-btn add-btn" onclick="addNewProduct()">+ Tambah Produk</button>
-    </div>
-    
-    <div class="section-separator"></div>
-    <button class="action-btn update-btn" onclick="hideAdminPanel()">Sembunyikan Panel</button>
-  </div>
   <div id="paymentModal" class="modal">
     <div class="modal-content" id="modalContent">
       </div>
   </div>
-<br><br><br><br><br><br><br><br><br>
+
   <footer>
     Butuh bantuan? Hubungi <a href="https://wa.me/6285751817154" target="_blank">Admin</a><br>
     © 2024 NetHub Digital. Semua Hak Dilindungi.
   </footer>
 
   <script>
-    // SANDI ADMIN
-    const ADMIN_PASSWORD = "012529";
+    // SANDI ADMIN dihapus
     // STATUS READY
     const R = "<span class='ready-status'>✅ Ready Stock</span> | ";
     
@@ -473,13 +380,13 @@
         { name: 'Telkomsel 80GB', price: 120000, desc: R + '- Kuota Nasional aktif 30 hari<br>- Bonus tambahan 5GB YouTube<br>- Garansi masa aktif penuh<br>- Aktivasi instan' }
       ],
       xl: [
-        { name: 'XL SUPERMINI', price: 39000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 13–15 GB<br>- AREA 2: 15–17 GB<br>- AREA 3: 20–22 GB<br>- AREA 4: 30–32 GB' },
-        { name: 'XL MINI', price: 50000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 32–34 GB<br>- AREA 2: 34–36 GB<br>- AREA 3: 39–41 GB<br>- AREA 4: 49–51 GB' },
-        { name: 'XL BIG', price: 55000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 38–40 GB<br>- AREA 2: 40–42 GB<br>- AREA 3: 45–47 GB<br>- AREA 4: 55–57 GB' }, 
-        { name: 'XL JUMBO V2', price: 63000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 50–53 GB<br>- AREA 2: 52–55 GB<br>- AREA 3: 57–60 GB<br>- AREA 4: 67–70 GB' },
-        { name: 'XL BIG SUPER', price: 71000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 63–65 GB<br>- AREA 2: 65–67 GB<br>- AREA 3: 70–72 GB<br>- AREA 4: 80–82 GB' },
-        { name: 'XL JUMBO', price: 85000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 65 GB<br>- AREA 2: 70 GB<br>- AREA 3: 83 GB<br>- AREA 4: 123 GB' },
-        { name: 'XL JUMBO V3', price: 87000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 87–90 GB<br>- AREA 2: 89–92 GB<br>- AREA 3: 94–97 GB<br>- AREA 4: 104–107 GB' }
+        { name: ' SUPERMINI', price: 39000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 13–15 GB<br>- AREA 2: 15–17 GB<br>- AREA 3: 20–22 GB<br>- AREA 4: 30–32 GB' },
+        { name: ' MINI', price: 50000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 32–34 GB<br>- AREA 2: 34–36 GB<br>- AREA 3: 39–41 GB<br>- AREA 4: 49–51 GB' },
+        { name: ' BIG', price: 55000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 38–40 GB<br>- AREA 2: 40–42 GB<br>- AREA 3: 45–47 GB<br>- AREA 4: 55–57 GB' }, 
+        { name: ' JUMBO V2', price: 63000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 50–53 GB<br>- AREA 2: 52–55 GB<br>- AREA 3: 57–60 GB<br>- AREA 4: 67–70 GB' },
+        { name: ' BIG SUPER', price: 71000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 63–65 GB<br>- AREA 2: 65–67 GB<br>- AREA 3: 70–72 GB<br>- AREA 4: 80–82 GB' },
+        { name: ' JUMBO', price: 85000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 65 GB<br>- AREA 2: 70 GB<br>- AREA 3: 83 GB<br>- AREA 4: 123 GB' },
+        { name: ' JUMBO V3', price: 87000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 87–90 GB<br>- AREA 2: 89–92 GB<br>- AREA 3: 94–97 GB<br>- AREA 4: 104–107 GB' }
       ]
     };
 
@@ -558,6 +465,7 @@
     }
 
     function showQR() {
+      // Perhatian: String QRIS ini bersifat statis dan hanya untuk demo tampilan.
       const qrString = '00020101021126670016COM.NOBUBANK.WWW01189360050300000907180214531277541631500303UMI51440014ID.CO.QRIS.WWW0215ID20254466748920303UMI5204481253033605802ID5914Pulsa CELLULAR6009INDONESIA61059024262070703A0163045CAF';
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrString)}&size=220x220`;
       const modal = document.getElementById('modalContent');
@@ -630,134 +538,8 @@
       }, 1000);
     }
 
-
-    // =======================================================
-    // FUNGSI ADMIN PANEL
-    // =======================================================
+    // FUNGSI ADMIN PANEL DIHAPUS
     
-    // Trigger Admin Panel (Double-click header)
-    document.getElementById('main-header').addEventListener('dblclick', promptAdminPassword);
-
-    function promptAdminPassword() {
-        const panel = document.getElementById('admin-panel');
-        // Jika sudah terbuka, kita tutup tanpa prompt
-        if (panel.style.display === 'block') {
-            hideAdminPanel();
-            return;
-        }
-
-        const password = prompt("Masukkan Sandi Admin:");
-
-        if (password === ADMIN_PASSWORD) {
-            showAdminPanel();
-        } else if (password !== null) {
-            alert("Sandi salah. Akses ditolak.");
-        }
-    }
-
-    function showAdminPanel() {
-        document.getElementById('admin-panel').style.display = 'block';
-        renderAdminProducts();
-    }
-
-    function hideAdminPanel() {
-        document.getElementById('admin-panel').style.display = 'none';
-    }
-
-    // Render daftar produk di panel admin
-    function renderAdminProducts() {
-        const category = document.getElementById('admin-category-select').value;
-        const list = document.getElementById('admin-products-list');
-        list.innerHTML = '';
-
-        products[category].forEach((p, index) => {
-            const item = document.createElement('div');
-            item.className = 'admin-product-item';
-            item.innerHTML = `
-                <label>Nama Produk:</label>
-                <input type="text" id="name-${category}-${index}" value="${p.name}" />
-
-                <label>Harga:</label>
-                <input type="number" id="price-${category}-${index}" value="${p.price}" />
-
-                <label>Deskripsi (Termasuk Status Ready/Habis):</label>
-                <textarea id="desc-${category}-${index}">${p.desc.replace(/<br>/g, '\n')}</textarea>
-
-                <button class="action-btn delete-btn" onclick="deleteProduct('${category}', ${index})">Hapus</button>
-                <button class="action-btn update-btn" onclick="updateProduct('${category}', ${index})">Simpan Perubahan</button>
-            `;
-            list.appendChild(item);
-        });
-    }
-
-    // Update produk yang sudah ada
-    function updateProduct(category, index) {
-        const newName = document.getElementById(`name-${category}-${index}`).value;
-        const newPrice = parseInt(document.getElementById(`price-${category}-${index}`).value);
-        // Mengganti newline (\n) dari textarea kembali ke tag <br> untuk HTML
-        const newDesc = document.getElementById(`desc-${category}-${index}`).value.replace(/\n/g, '<br>');
-
-        if (newName && !isNaN(newPrice) && newDesc) {
-            products[category][index].name = newName;
-            products[category][index].price = newPrice;
-            products[category][index].desc = newDesc;
-            
-            renderAdminProducts();
-            if (activeCategory === category) {
-                // Refresh tampilan user
-                toggleProducts(category);
-                toggleProducts(category); 
-            }
-            alert('Produk berhasil diupdate (sementara)!');
-        } else {
-            alert('Semua kolom harus diisi dengan benar.');
-        }
-    }
-
-    // Hapus produk
-    function deleteProduct(category, index) {
-        if (confirm(`Yakin ingin menghapus ${products[category][index].name}?`)) {
-            products[category].splice(index, 1);
-            
-            renderAdminProducts();
-            if (activeCategory === category) {
-                toggleProducts(category);
-                toggleProducts(category); 
-            }
-            alert('Produk berhasil dihapus (sementara)!');
-        }
-    }
-
-    // Tambah produk baru
-    function addNewProduct() {
-        const category = document.getElementById('admin-category-select').value;
-        const newName = document.getElementById('new-product-name').value;
-        const newPrice = parseInt(document.getElementById('new-product-price').value);
-        // Mengganti newline (\n) dari textarea kembali ke tag <br> untuk HTML
-        const newDesc = document.getElementById('new-product-desc').value.replace(/\n/g, '<br>');
-
-        if (newName && !isNaN(newPrice) && newDesc) {
-            products[category].push({
-                name: newName,
-                price: newPrice,
-                desc: newDesc
-            });
-
-            // Reset form
-            document.getElementById('new-product-name').value = '';
-            document.getElementById('new-product-price').value = '';
-            document.getElementById('new-product-desc').value = '';
-
-            renderAdminProducts();
-            if (activeCategory === category) {
-                toggleProducts(category);
-                toggleProducts(category);
-            }
-            alert('Produk baru berhasil ditambahkan (sementara)!');
-        } else {
-            alert('Nama, Harga, dan Deskripsi harus diisi.');
-        }
-    }
   </script>
 </body>
 </html>
