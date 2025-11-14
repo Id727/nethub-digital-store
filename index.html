@@ -282,12 +282,82 @@
       font-size: 1rem;
     }
 
+    /* --- STYLES BARU UNTUK TAMPILAN QRIS --- */
+    .transaction-details {
+        text-align: left;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .transaction-details p {
+        font-size: 1rem;
+        margin-bottom: 8px;
+        color: #555;
+        display: flex;
+        justify-content: space-between;
+    }
+    .transaction-details p span {
+        color: #666;
+    }
+    .transaction-details p strong {
+        color: #007aff;
+        font-size: 1.1rem;
+    }
+
+    .qr-container {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+    
     .qr-image {
-      margin-top: 15px;
+      margin-top: 10px;
+      margin-bottom: 10px;
       border-radius: 10px;
       width: 220px;
       height: 220px;
+      border: 1px solid #eee; /* Tambahan border */
     }
+
+    .download-qr-link {
+        display: inline-block;
+        margin-top: 5px;
+        font-size: 0.9rem;
+        color: #007aff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 5px 10px;
+        border: 1px solid #007aff;
+        border-radius: 20px;
+        transition: background 0.2s, color 0.2s;
+    }
+    .download-qr-link:hover {
+        background: #e6f0ff;
+    }
+
+    #payment-timer {
+        font-size: 1.1rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    #payment-timer strong {
+        color: #e91e63; /* Warna pink/merah untuk timer */
+        font-weight: 600;
+    }
+
+    .payment-instructions {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 15px;
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    .payment-instructions p {
+        margin: 5px 0;
+    }
+    /* --- END STYLES BARU --- */
+
 
     .close-btn {
       margin-top: 10px;
@@ -464,6 +534,7 @@
     // FUNGSI MODAL PEMBAYARAN
     // =======================================================
     let selectedPrice = 0;
+    let countdownInterval = null; // Variabel untuk menyimpan ID interval timer
 
     function openModal(price) {
       selectedPrice = price;
@@ -479,6 +550,11 @@
 
     function closeModal() {
       document.getElementById('paymentModal').style.display = 'none';
+      // Hentikan timer jika sedang berjalan
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
     }
 
     function showQR() {
@@ -492,16 +568,66 @@
         return;
       }
       
-      // Langkah 2: Tampilkan QRIS dan rincian transaksi
+      // Langkah 2: Tampilkan QRIS dan rincian transaksi (Tampilan Profesional Baru)
       modal.innerHTML = `
-        <h3>Pembayaran</h3>
-        <p>Nominal: <strong>Rp ${selectedPrice.toLocaleString()}</strong></p>
-        <p>Tujuan: <strong>${phone}</strong></p>
-        <p>Silakan transfer menggunakan QRIS di bawah ini:</p>
-        <img class='qr-image' src='${qrUrl}' alt='QRIS' />
-        <p style='margin-top:10px;font-size:0.9rem;color:#555'>Setelah transfer, pesanan akan otomatis diproses.</p>
+        <h3>Pembayaran QRIS</h3>
+        
+        <div class="transaction-details">
+            <p><span>Nominal Transfer:</span> <strong>Rp ${selectedPrice.toLocaleString()}</strong></p>
+            <p><span>Nomor Tujuan:</span> <strong>${phone}</strong></p>
+        </div>
+
+        <div class="qr-container">
+            <p id="payment-timer">Batas Waktu: <strong>10:00</strong></p>
+            <a href="${qrUrl}" download="NetHub_Payment_QRIS.png">
+                <img class='qr-image' src='${qrUrl}' alt='QRIS Payment' />
+            </a>
+            <a href="${qrUrl}" class="download-qr-link" download="NetHub_Payment_QRIS.png">
+                Unduh Kode QR
+            </a>
+        </div>
+        
+        <div class="payment-instructions">
+            <p>Silakan pindai (scan) Kode QR di atas menggunakan aplikasi perbankan atau e-wallet Anda.</p>
+            <p>Pastikan nominal transfer sudah sesuai.</p>
+            <p style="margin-top: 8px;"><strong>Setelah transfer, pesanan akan otomatis diproses.</strong></p>
+        </div>
+
         <button class='close-btn' onclick='closeModal()'>Tutup</button>
       `;
+      
+      // Mulai timer 10 menit (600 detik)
+      const timerDisplay = document.getElementById('payment-timer');
+      startCountdown(60 * 10, timerDisplay);
+    }
+    
+    // FUNGSI BARU UNTUK TIMER HITUNG MUNDUR
+    function startCountdown(duration, displayElement) {
+      let timer = duration, minutes, seconds;
+      
+      // Hapus interval lama jika ada (untuk mencegah double timer)
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+
+      countdownInterval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        displayElement.innerHTML = `Batas Waktu: <strong>${minutes}:${seconds}</strong>`;
+
+        if (--timer < 0) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+          displayElement.innerHTML = "<strong style='color: red;'>Waktu Habis!</strong>";
+          
+          // Otomatis tutup modal setelah 2 detik
+          setTimeout(closeModal, 2000);
+        }
+      }, 1000);
     }
 
 
