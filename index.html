@@ -453,7 +453,7 @@
     // =======================================================
 
     // !!! GANTI INI DENGAN URL VERCEL ANDA YANG SESUNGGUHNYA !!!
-    const BASE_URL = 'https://[VERCEL_API_URL].vercel.app'; 
+    const BASE_URL = 'https://nethub-digital-store.vercel.app'; 
     const API_URL = `${BASE_URL}/api/products`; 
     const API_CATEGORY_URL = `${BASE_URL}/api/categories`; 
 
@@ -461,22 +461,22 @@
     
     // Data Kategori Awal (Digunakan jika API Kategori Gagal)
     let categoriesData = [
-        { id: 1, name: 'Kuota Indosat', icon_url: 'https://iili.io/KyFri8u.png', category_order: 1, is_active: true, color: '#007aff' },
-        { id: 2, name: 'Kuota Telkomsel', icon_url: 'https://iili.io/KyF4MAb.png', category_order: 2, is_active: true, color: '#f44336' },
-        { id: 3, name: 'Kuota XL Akrab', icon_url: 'https://iili.io/KyF66mb.png', category_order: 3, is_active: true, color: '#ff9800' }
+        { id: 'cat-indosat', name: 'Kuota Indosat', icon_url: 'https://iili.io/KyFri8u.png', category_order: 1, is_active: true, color: '#007aff' },
+        { id: 'cat-telkomsel', name: 'Kuota Telkomsel', icon_url: 'https://iili.io/KyF4MAb.png', category_order: 2, is_active: true, color: '#f44336' },
+        { id: 'cat-xl', name: 'Kuota XL Akrab', icon_url: 'https://iili.io/KyF66mb.png', category_order: 3, is_active: true, color: '#ff9800' }
     ];
 
-    // Data produk awal (SEED DATA) - Perhatikan ID Kategori kini berbentuk angka (sesuai Supabase)
+    // Data produk awal (SEED DATA) - DATA LENGKAP
     const SEED_PRODUCTS = {
-        '1': [
+        'cat-indosat': [
             { id: 101, name: 'Indosat 50GB', price: 55000, description: '- Kuota Aktif 28 Hari\n- Jaringan 4G/5G\n- Proses cepat otomatis', product_order: 1, is_active: true, stock_status: 'ready', image_url: '' },
             { id: 102, name: 'Indosat 80GB', price: 95000, description: '- Kuota Aktif 30 Hari\n- Jaringan 4G/5G\n- Proses cepat otomatis', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' }
         ],
-        '2': [
+        'cat-telkomsel': [
             { id: 201, name: 'Telkomsel 30GB', price: 65000, description: '- Kuota Nasional aktif 30 hari\n- Berlaku semua jaringan\n- Aktivasi instan', product_order: 1, is_active: true, stock_status: 'ready', image_url: '' },
             { id: 202, name: 'Telkomsel 80GB', price: 120000, description: '- Kuota Nasional aktif 30 hari\n- Bonus tambahan 5GB YouTube', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' }
         ],
-        '3': [
+        'cat-xl': [
             { id: 301, name: 'XL SUPERMINI', price: 39000, description: 'Masa aktif: 27/28 hari\n- AREA 1: 13–15 GB\n- AREA 4: 30–32 GB', product_order: 1, is_active: true, stock_status: 'habis', image_url: '' },
             { id: 302, name: 'XL MINI', price: 50000, description: 'Masa aktif: 27/28 hari\n- AREA 1: 32–34 GB\n- AREA 4: 49–51 GB', product_order: 2, is_active: true, stock_status: 'ready', image_url: '' },
             { id: 303, name: 'XL AKRAB 1', price: 60000, description: '- Kuota utama 10GB\n- 4 Member\n- Masa Aktif 30 hari', product_order: 3, is_active: true, stock_status: 'ready', image_url: '' },
@@ -527,12 +527,6 @@
                 categoriesData.sort((a, b) => a.category_order - b.category_order);
             } else {
                  console.warn("Gagal fetch kategori dari API. Menggunakan data SEED Kategori.");
-                 // Kategorinya harus diubah ke format Array jika API gagal
-                 categoriesData = [
-                    { id: 1, name: 'Kuota Indosat', icon_url: 'https://iili.io/KyFri8u.png', category_order: 1, is_active: true, color: '#007aff' },
-                    { id: 2, name: 'Kuota Telkomsel', icon_url: 'https://iili.io/KyF4MAb.png', category_order: 2, is_active: true, color: '#f44336' },
-                    { id: 3, name: 'Kuota XL Akrab', icon_url: 'https://iili.io/KyF66mb.png', category_order: 3, is_active: true, color: '#ff9800' }
-                ];
             }
             
             // 2. Fetch Products
@@ -575,16 +569,13 @@
         container.innerHTML = '';
         
         categoriesData.forEach(cat => {
-            // Catatan: ID Kategori harus diubah menjadi string saat digunakan di DOM
-            const categoryIdString = cat.id.toString(); 
-
             if (!cat.is_active) return; // Sembunyikan jika kategori nonaktif
             
             const div = document.createElement('div');
             div.className = 'category';
-            div.id = `cat-${categoryIdString}`; // ID DOM menggunakan string
+            div.id = `cat-${cat.id}`;
             div.style.borderLeft = `5px solid ${cat.color}`;
-            div.onclick = () => toggleProducts(categoryIdString); // Panggil dengan string
+            div.onclick = () => toggleProducts(cat.id);
             
             div.innerHTML = `
                 <img src="${cat.icon_url}" alt="${cat.name}" />
@@ -598,7 +589,7 @@
         const section = document.getElementById('productSection');
         const allCategories = document.querySelectorAll('.category');
         const currentCategoryElement = document.getElementById(`cat-${categoryId}`);
-        const category = categoriesData.find(c => c.id.toString() === categoryId); // Cari berdasarkan string ID
+        const category = categoriesData.find(c => c.id === categoryId);
 
         if (!dataFetched) { await fetchData(); }
         if (!category || !category.is_active) return;
@@ -617,8 +608,7 @@
         section.innerHTML = '';
         
         // Tambahkan Tombol Cek Area XL
-        // Cek ID Kategori yang sesuai dengan XL (misal: 3)
-        if (category.name.toUpperCase().includes('XL')) {
+        if (categoryId === 'cat-xl') {
             const checkAreaLink = document.createElement('a');
             checkAreaLink.href = "https://raw.githack.com/vieralola/Cekareaviera.html/main/Cekareaviera.html";
             checkAreaLink.target = "_blank";
@@ -640,7 +630,6 @@
                 div.style.borderLeft = `5px solid ${category.color}`;
                 
                 const statusTag = getStatusTag(p.stock_status); 
-                // Ganti newline (\n) dengan <br> untuk tampilan deskripsi
                 const descHtml = (p.description || '').replace(/\n/g, '<br>');
                 const isDisabled = p.stock_status !== 'ready';
 
@@ -677,7 +666,6 @@
 
     function openModal(price) {
         selectedPrice = price;
-        // URL QRIS
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent('00020101021126670016COM.NOBUBANK.WWW01189360050300000907180214531277541631500303UMI51440014ID.CO.QRIS.WWW0215ID20254466748920303UMI5204481253033605802ID5914Pulsa CELLULAR6009INDONESIA61059024262070703A0163045CAF')}&size=220x220`;
 
         document.getElementById('modalContent').innerHTML = `
@@ -759,7 +747,6 @@
             select.innerHTML = '';
             categoriesData.forEach(cat => {
                 const option = document.createElement('option');
-                // Nilai option adalah ID Kategori (angka)
                 option.value = cat.id; 
                 option.textContent = cat.name;
                 if (!cat.is_active) {
@@ -771,7 +758,7 @@
     }
 
     // =======================================================
-    // 1. MANAJEMEN KATEGORI (REAL-TIME FETCH)
+    // 1. MANAJEMEN KATEGORI
     // =======================================================
     
     function toggleAddCategoryForm() {
@@ -781,8 +768,7 @@
     
     function renderCategoryDetails() {
         const catId = document.getElementById('admin-category-select-manage').value;
-        // Cari kategori berdasarkan ID (angka)
-        const cat = categoriesData.find(c => c.id.toString() === catId); 
+        const cat = categoriesData.find(c => c.id === catId);
         
         if (cat) {
             document.getElementById('edit-cat-id').value = cat.id;
@@ -798,52 +784,23 @@
         renderAdminProducts();
     }
     
-    // *BARU* FUNGSI addCategory()
     async function addCategory() {
         const name = document.getElementById('new-cat-name').value;
         const color = document.getElementById('new-cat-color').value;
-        const icon_url = document.getElementById('new-cat-icon').value;
-        const category_order = parseInt(document.getElementById('new-cat-order').value);
+        const icon = document.getElementById('new-cat-icon').value;
+        const order = parseInt(document.getElementById('new-cat-order').value);
 
-        if (!name || isNaN(category_order)) { alert('Nama dan Urutan Kategori harus diisi dan Urutan harus angka.'); return; }
+        if (!name || isNaN(order)) { alert('Nama dan Urutan Kategori harus diisi.'); return; }
 
-        const data = {
-            name,
-            color,
-            icon_url,
-            category_order,
-            is_active: true 
-        };
-
-        try {
-            const response = await fetch(API_CATEGORY_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert(`Kategori baru: ${name} berhasil ditambahkan ke database!`);
-                // Reset form
-                document.getElementById('new-cat-name').value = '';
-                document.getElementById('new-cat-color').value = '';
-                document.getElementById('new-cat-icon').value = '';
-                document.getElementById('new-cat-order').value = '';
-                await fetchData(); // Refresh UI
-            } else {
-                const error = await response.json();
-                alert(`Gagal menambah kategori: ${error.error || response.statusText}. Pastikan data valid.`);
-            }
-        } catch (e) {
-            alert('Koneksi API kategori gagal. Cek URL Vercel atau jaringan.');
-            console.error(e);
-        }
+        // SIMULASI API POST
+        alert(`Kategori baru: ${name} (Urutan: ${order}). Fungsi 'Tambah Kategori' siap diimplementasikan dengan API POST ke ${API_CATEGORY_URL}`);
+        await fetchData(); 
     }
     
-    // *BARU* FUNGSI updateCategory()
     async function updateCategory() {
         const catId = document.getElementById('edit-cat-id').value;
         const data = {
+            id: catId,
             name: document.getElementById('edit-cat-name').value,
             color: document.getElementById('edit-cat-color').value,
             icon_url: document.getElementById('edit-cat-icon').value,
@@ -853,52 +810,23 @@
 
         if (!data.name || isNaN(data.category_order)) { alert('Nama dan Urutan harus valid.'); return; }
         
-        try {
-            const response = await fetch(`${API_CATEGORY_URL}?id=${catId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert(`Kategori ${data.name} berhasil diupdate secara permanen!`);
-                await fetchData(); // Refresh UI
-            } else {
-                const error = await response.json();
-                alert(`Gagal mengupdate kategori: ${error.error || response.statusText}`);
-            }
-        } catch (e) {
-            alert('Koneksi API kategori gagal. Cek URL Vercel atau jaringan.');
-            console.error(e);
-        }
+        // SIMULASI API PUT
+        alert(`Kategori ${data.name} (ID: ${catId}) diupdate. Status Aktif: ${data.is_active}. Fungsi 'Update Kategori' siap diimplementasikan dengan API PUT ke ${API_CATEGORY_URL}`);
+        await fetchData(); 
     }
     
-    // *BARU* FUNGSI deleteCategory()
     async function deleteCategory() {
         const catId = document.getElementById('edit-cat-id').value;
         const catName = document.getElementById('edit-cat-name').value;
         if (!confirm(`Yakin ingin menghapus kategori: ${catName} dan SEMUA produk di dalamnya secara PERMANEN?`)) return;
         
-        try {
-            const response = await fetch(`${API_CATEGORY_URL}?id=${catId}`, {
-                method: 'DELETE'
-            });
-
-            if (response.status === 204 || response.ok) { // 204 No Content (sukses hapus)
-                alert(`Kategori ${catName} dan produk terkait berhasil dihapus permanen!`);
-                await fetchData(); // Refresh UI
-            } else {
-                const error = await response.json();
-                alert(`Gagal menghapus kategori: ${error.error || response.statusText}`);
-            }
-        } catch (e) {
-            alert('Koneksi API kategori gagal. Cek URL Vercel atau jaringan.');
-            console.error(e);
-        }
+        // SIMULASI API DELETE
+        alert(`Kategori ${catName} (ID: ${catId}) dihapus. Fungsi 'Hapus Kategori' siap diimplementasikan dengan API DELETE ke ${API_CATEGORY_URL}`);
+        await fetchData(); 
     }
 
     // =======================================================
-    // 2. MANAJEMEN PRODUK (REAL-TIME FETCH)
+    // 2. MANAJEMEN PRODUK
     // =======================================================
 
     function toggleAddProductForm() {
@@ -908,7 +836,7 @@
 
     function renderAdminProducts() {
         const categoryId = document.getElementById('admin-category-select').value;
-        const categoryName = categoriesData.find(c => c.id.toString() === categoryId)?.name || 'N/A';
+        const categoryName = categoriesData.find(c => c.id === categoryId)?.name || 'N/A';
         document.getElementById('editing-category-name').textContent = categoryName;
         document.getElementById('selected-add-category').textContent = categoryName;
 
@@ -923,9 +851,6 @@
                 const item = document.createElement('div');
                 item.className = 'admin-product-item';
                 
-                // Pastikan deskripsi dikembalikan ke \n untuk diedit di textarea
-                const descForEdit = (p.description || '').replace(/<br>/g, '\n');
-
                 item.innerHTML = `
                     <label style="color:#007aff;">ID Database: ${p.id}</label>
                     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -955,7 +880,7 @@
                     </div>
 
                     <label>Deskripsi:</label>
-                    <textarea id="desc-${p.id}">${descForEdit}</textarea>
+                    <textarea id="desc-${p.id}">${p.description.replace(/<br>/g, '\n')}</textarea>
 
                     <button class="action-btn delete-btn" onclick="deleteProduct('${p.id}')">Hapus Permanen</button>
                     <button class="action-btn update-btn" onclick="updateProduct('${p.id}')">Simpan Perubahan Permanen</button>
@@ -967,113 +892,65 @@
         }
     }
 
-    // *BARU* FUNGSI updateProduct()
     async function updateProduct(id) {
         const categoryId = document.getElementById('admin-category-select').value;
         const data = {
-            // TIDAK mengirim ID produk, hanya digunakan di URL parameter
-            category_id: parseInt(categoryId), // WAJIB INT
+            id: id,
+            category_id: categoryId,
             name: document.getElementById(`name-${id}`).value,
-            price: parseInt(document.getElementById(`price-${id}`).value), // WAJIB INT
+            price: parseInt(document.getElementById(`price-${id}`).value),
             image_url: document.getElementById(`image-${id}`).value,
-            product_order: parseInt(document.getElementById(`order-${id}`).value), // WAJIB INT
+            product_order: parseInt(document.getElementById(`order-${id}`).value),
             is_active: document.getElementById(`active-${id}`).value === 'true',
             stock_status: document.getElementById(`status-${id}`).value,
-            // Ganti \n menjadi <br> sebelum dikirim ke database
             description: document.getElementById(`desc-${id}`).value.replace(/\n/g, '<br>')
         };
         
-        if (!data.name || isNaN(data.price) || isNaN(data.product_order)) { alert('Nama, Harga, dan Urutan harus valid.'); return; }
+        if (!data.name || isNaN(data.price)) { alert('Nama dan Harga harus valid.'); return; }
         
-        try {
-            const response = await fetch(`${API_URL}?id=${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert(`Produk ID: ${id} (${data.name}) berhasil diupdate secara permanen!`);
-                await fetchData();
-            } else {
-                const error = await response.json();
-                alert(`Gagal mengupdate produk: ${error.error || response.statusText}`);
-            }
-        } catch (e) {
-            alert('Koneksi API produk gagal. Cek URL Vercel atau jaringan.');
-            console.error(e);
-        }
+        // SIMULASI API PUT
+        alert(`Produk ID: ${id} diupdate. Status Stok: ${data.stock_status}, Urutan: ${data.product_order}. Fungsi 'Update Produk' siap diimplementasikan dengan API PUT ke ${API_URL}`);
+        await fetchData();
     }
 
-    // *BARU* FUNGSI deleteProduct()
     async function deleteProduct(id) {
         if (!confirm(`Yakin ingin menghapus Produk ID: ${id} secara PERMANEN?`)) return;
         
-        try {
-            const response = await fetch(`${API_URL}?id=${id}`, {
-                method: 'DELETE'
-            });
-
-            if (response.status === 204 || response.ok) {
-                alert(`Produk ID: ${id} berhasil dihapus permanen!`);
-                await fetchData();
-            } else {
-                const error = await response.json();
-                alert(`Gagal menghapus produk: ${error.error || response.statusText}`);
-            }
-        } catch (e) {
-            alert('Koneksi API produk gagal. Cek URL Vercel atau jaringan.');
-            console.error(e);
-        }
+        // SIMULASI API DELETE
+        alert(`Produk ID: ${id} dihapus. Fungsi 'Hapus Produk' siap diimplementasikan dengan API DELETE ke ${API_URL}`);
+        await fetchData();
     }
 
-    // *BARU* FUNGSI addNewProduct()
     async function addNewProduct() {
         const categoryId = document.getElementById('admin-category-select').value;
         const data = {
-            category_id: parseInt(categoryId), // WAJIB INT
+            category_id: categoryId,
             name: document.getElementById('new-product-name').value,
-            price: parseInt(document.getElementById('new-product-price').value), // WAJIB INT
+            price: parseInt(document.getElementById('new-product-price').value),
             image_url: document.getElementById('new-product-image').value,
-            product_order: parseInt(document.getElementById('new-product-order').value), // WAJIB INT
+            product_order: parseInt(document.getElementById('new-product-order').value),
             // Default status untuk produk baru
             is_active: true, 
             stock_status: 'ready', 
-            // Ganti \n menjadi <br> sebelum dikirim ke database
             description: document.getElementById('new-product-desc').value.replace(/\n/g, '<br>')
         };
 
         if (!data.name || isNaN(data.price) || !data.description || isNaN(data.product_order)) {
-            alert('Nama, Harga, Deskripsi, dan Urutan harus diisi dengan benar.');
+            alert('Nama, Harga, Deskripsi, dan Urutan harus diisi.');
             return;
         }
 
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert(`Produk baru: ${data.name} berhasil ditambahkan ke database!`);
-                
-                // Reset form
-                document.getElementById('new-product-name').value = '';
-                document.getElementById('new-product-price').value = '';
-                document.getElementById('new-product-image').value = '';
-                document.getElementById('new-product-desc').value = '';
-                document.getElementById('new-product-order').value = 10;
-                
-                await fetchData();
-            } else {
-                const error = await response.json();
-                alert(`Gagal menambah produk: ${error.error || response.statusText}. Pastikan data valid.`);
-            }
-        } catch (e) {
-            alert('Koneksi API produk gagal. Cek URL Vercel atau jaringan.');
-            console.error(e);
-        }
+        // SIMULASI API POST
+        alert(`Produk baru: ${data.name} ditambahkan ke Kategori ID: ${categoryId}. Fungsi 'Tambah Produk' siap diimplementasikan dengan API POST ke ${API_URL}`);
+        
+        // Reset form
+        document.getElementById('new-product-name').value = '';
+        document.getElementById('new-product-price').value = '';
+        document.getElementById('new-product-image').value = '';
+        document.getElementById('new-product-desc').value = '';
+        document.getElementById('new-product-order').value = 10;
+        
+        await fetchData();
     }
   </script>
 </body>
