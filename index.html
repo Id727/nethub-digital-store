@@ -5,12 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NetHub Digital | Toko Kuota Internet</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Roboto:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap');
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    /* --- Keyframes untuk Teks Berjalan (Marquee Modern) --- */
+    @keyframes marquee {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+    
+    /* --- Keyframes untuk Notifikasi Fiktif --- */
+    @keyframes slideIn {
+        0% { transform: translateY(100%); opacity: 0; }
+        10% { transform: translateY(0); opacity: 1; }
+        90% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(100%); opacity: 0; }
     }
 
     body {
@@ -20,10 +34,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
-      transition: background 0.3s ease;
-      /* Menyesuaikan min-height agar footer bisa didorong ke bawah */
-      min-height: 100vh; 
+      padding: 20px 20px 0; 
+      min-height: 10vh; 
     }
 
     header {
@@ -31,24 +43,80 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       background: linear-gradient(90deg, #ffffff, #f8f9fb);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
       border-radius: 15px;
       padding: 15px 20px;
-      transition: 0.3s;
       max-width: 600px;
-      /* Dihapus: cursor: pointer; */ 
     }
 
     .logo-text {
       font-family: 'Poppins', sans-serif;
       font-size: 1.8rem;
-      font-weight: 600;
+      font-weight: 700;
       color: #007aff;
       letter-spacing: 0.5px;
     }
 
+    /* MARQUEE DAN STATISTIK (Proporsional dan Compact) */
+    .hero-section {
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 0; 
+    }
+    
+    .marquee-container {
+        overflow: hidden;
+        white-space: nowrap;
+        background: #f0f7ff; 
+        border: 1px solid #d0e4ff;
+        border-radius: 6px; 
+        padding: 4px 0; 
+        margin: 0 0 12px 0; 
+        width: 100%; 
+    }
+    .marquee-text {
+        display: inline-block;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.85rem; 
+        font-weight: 600;
+        color: #007aff;
+        animation: marquee 25s linear infinite; /* DURASI DIPERLAMBAT */
+        padding-right: 200px; /* PERBAIKAN: Menambahkan ruang agar teks menyambung tanpa boas */
+    }
+    
+    .trust-stats {
+        display: flex;
+        justify-content: space-around;
+        gap: 5px; 
+        padding: 4px 0; 
+        border-radius: 8px; 
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        background: #ffffff; 
+        border: 1px solid #e0e0e0; 
+        width: 100%; 
+    }
+    .stat-item {
+        line-height: 1.1; 
+        padding: 4px 0; 
+        flex-basis: 33%; 
+    }
+    .stat-item span {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem; 
+        font-weight: 700;
+        color: #007aff;
+        display: block;
+    }
+    .stat-item small {
+        font-size: 0.65rem; 
+        color: #555;
+    }
+    /* --- AKHIR MARQUEE DAN STATISTIK --- */
+    
     .main-content {
         display: flex;
         flex-direction: column; 
@@ -56,10 +124,10 @@
         max-width: 600px; 
         gap: 20px;
         align-items: center;
-        /* Menambahkan flex-grow agar konten mengisi ruang dan mendorong footer */
         flex-grow: 1; 
+        padding-bottom: 20px; 
     }
-
+    
     .category-container {
       display: flex;
       flex-direction: row;
@@ -67,6 +135,7 @@
       width: 100%;
       flex-shrink: 0;
       justify-content: center;
+      margin-top: 20px;
     }
 
     .category {
@@ -74,52 +143,60 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-      padding: 15px 10px;
+      border-radius: 15px; 
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+      padding: 18px 10px; 
       cursor: pointer;
-      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
       background: #ffffff;
       color: #333;
-      border: 1px solid #eee;
-      width: 120px;
+      border: none;
+      width: 110px;
+      height: 110px;
+      position: relative;
+      overflow: hidden;
+      justify-content: center;
+    }
+    
+    .category:hover {
+        transform: translateY(-3px); 
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        background: #f7f7f7;
     }
     
     .category.active {
         background-color: #e6f0ff;
-        border-color: #007aff;
+        border: 2px solid #007aff; 
+        transform: scale(1.02);
     }
 
     .category img {
-      width: 50px;
-      height: 50px;
-      object-fit: contain;
-      margin-bottom: 5px;
-      margin-right: 0;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+      width: 50px; 
+      height: 50px; 
+      margin-bottom: 5px; 
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); 
+      transition: transform 0.3s;
     }
-
+    
     .category h3 {
       font-family: 'Poppins', sans-serif;
-      font-size: 0.9rem;
-      margin-top: 0;
-      font-weight: 500;
-      line-height: 1.2;
+      font-size: 0.9rem; 
+      font-weight: 600;
     }
     
     .product-utility-link {
         display: block;
         text-align: center;
         margin-bottom: 20px;
-        padding: 10px 15px;
-        background: #f0f7ff;
-        border: 1px solid #d0e4ff;
+        padding: 10px 15px; 
+        background: #007aff;
+        border: none;
         border-radius: 10px;
-        color: #007aff;
+        color: white;
         font-weight: 600;
         text-decoration: none;
-        transition: background 0.2s;
-        box-shadow: 0 1px 3px rgba(0, 122, 255, 0.1);
+        transition: background 0.2s, transform 0.2s;
+        box-shadow: 0 3px 6px rgba(0, 122, 255, 0.4);
     }
 
     .product-list {
@@ -127,63 +204,146 @@
       width: 100%; 
       max-width: 600px; 
       text-align: left;
-      margin-top: 20px;
+      margin-top: 25px; 
     }
 
     .product-card {
       background: #ffffff;
       border-radius: 15px;
-      margin-bottom: 20px;
-      padding: 25px;
+      margin-bottom: 15px; 
+      padding: 20px; 
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      border-left: 5px solid #007aff;
+      border-left: 6px solid #007aff;
       transition: 0.3s;
     }
 
     .product-card h4 {
       font-family: 'Poppins', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.1rem; 
       color: #333;
       margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     
     .product-card h4 span {
         color: #007aff;
-        font-weight: 600;
+        font-weight: 700;
+        flex-grow: 1;
     }
     
     .ready-status {
         color: #28a745; 
         font-weight: 600;
-        margin-right: 8px;
-        font-size: 0.95rem;
+        font-size: 0.9rem; 
+    }
+    .status-habis {
+        color: #dc3545;
+        font-weight: 600;
+        font-size: 0.9rem; 
     }
 
     .product-card p {
-      font-size: 0.95rem;
-      margin-bottom: 15px;
+      font-size: 0.9rem; 
+      margin-bottom: 12px;
       color: #666;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     
     .product-card strong {
         color: #e91e63;
-        font-size: 1.1rem;
+        font-size: 1.15rem; 
     }
 
     .buy-btn {
-      background: #007aff;
+      background: #28a745;
       color: white;
       border: none;
       padding: 10px 25px;
-      border-radius: 20px;
+      border-radius: 25px;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
       transition: 0.2s;
-      box-shadow: 0 2px 4px rgba(0, 122, 255, 0.4);
+      box-shadow: 0 3px 6px rgba(40, 167, 69, 0.4);
+    }
+    .buy-btn:hover {
+        background: #218838;
+        transform: translateY(-1px);
+    }
+    
+    .sold-out-btn {
+        background: #6c757d;
+        cursor: not-allowed;
+    }
+    .sold-out-btn:hover {
+        background: #6c757d;
+        transform: none;
+    }
+    
+    .close-btn { /* Style untuk tombol Batal/Tutup di modal */
+        background: #ff5722;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+        box-shadow: 0 3px 6px rgba(255, 87, 34, 0.4);
+        margin-top: 10px; 
+    }
+    .close-btn:hover {
+        background: #e64a19;
+        transform: translateY(-1px);
     }
 
-    /* === MODAL STYLES === */
+
+    /* === CSS NOTIFIKASI FIKTIF BARU === */
+    #notification-container {
+      position: fixed;
+      bottom: 20px; 
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100; 
+      max-width: 90%;
+      pointer-events: none; 
+    }
+
+    .fake-notification {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border-left: 5px solid #28a745; /* Warna hijau untuk sukses */
+      transition: all 0.5s ease-in-out;
+      opacity: 0; 
+      transform: translateY(100%);
+      font-size: 0.9rem;
+      color: #333;
+      min-width: 250px;
+    }
+    
+    .fake-notification.show {
+        animation: slideIn 6s ease-in-out forwards; 
+    }
+
+    .notif-icon {
+        color: #28a745; /* Ikon ceklist */
+        font-size: 1.5rem;
+        margin-right: 10px;
+        line-height: 1;
+    }
+    
+    .notif-text strong {
+        color: #007aff;
+    }
+    /* === END CSS NOTIFIKASI FIKTIF === */
+    
+    
+    /* === MODAL STYLES (Dipertahankan Ramping) === */
     .modal {
       display: none;
       position: fixed;
@@ -191,8 +351,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.6); 
+      backdrop-filter: blur(5px); 
       justify-content: center;
       align-items: center;
       z-index: 1000;
@@ -200,131 +360,98 @@
 
     .modal-content {
       background: white;
-      border-radius: 15px;
-      padding: 25px;
+      border-radius: 18px; 
+      padding: 20px; 
       width: 90%;
-      max-width: 400px;
+      max-width: 350px; 
       text-align: center;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     .modal-content h3 {
       font-family: 'Poppins', sans-serif;
-      margin-bottom: 15px;
+      margin-bottom: 15px; 
+      font-size: 1.3rem; 
     }
 
     .modal-content input[type="number"] {
       width: 100%;
-      padding: 10px;
+      padding: 10px; 
       margin-bottom: 15px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 8px; 
+      font-size: 1rem; 
+      text-align: center;
     }
 
-    /* --- STYLES BARU UNTUK TAMPILAN QRIS --- */
     .transaction-details {
         text-align: left;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 15px; 
+        padding-bottom: 10px; 
+        border-bottom: 1px dashed #ddd; 
     }
     .transaction-details p {
-        font-size: 1rem;
-        margin-bottom: 8px;
-        color: #555;
-        display: flex;
-        justify-content: space-between;
-    }
-    .transaction-details p span {
-        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 5px; 
+        display: flex; /* Tambahan untuk memisahkan label dan value */
+        justify-content: space-between; /* Tambahan untuk memisahkan label dan value */
     }
     .transaction-details p strong {
-        color: #007aff;
-        font-size: 1.1rem;
+        font-size: 1.05rem; 
     }
 
+
     .qr-container {
-        margin-top: 10px;
-        margin-bottom: 15px;
+        margin-top: 5px; 
+        margin-bottom: 10px; 
     }
     
     .qr-image {
-      margin-top: 10px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      width: 220px;
-      height: 220px;
-      border: 1px solid #eee; /* Tambahan border */
-    }
-
-    .download-qr-link {
-        display: inline-block;
-        margin-top: 5px;
-        font-size: 0.9rem;
-        color: #007aff;
-        text-decoration: none;
-        font-weight: 600;
-        padding: 5px 10px;
-        border: 1px solid #007aff;
-        border-radius: 20px;
-        transition: background 0.2s, color 0.2s;
-    }
-    .download-qr-link:hover {
-        background: #e6f0ff;
+      width: 180px; 
+      height: 180px; 
+      margin-top: 5px;
+      margin-bottom: 5px;
     }
 
     #payment-timer {
-        font-size: 1.1rem;
-        color: #333;
-        margin-bottom: 10px;
-    }
-    #payment-timer strong {
-        color: #e91e63; /* Warna pink/merah untuk timer */
-        font-weight: 600;
+        font-size: 1rem; 
+        margin-bottom: 8px; 
+        color: #dc3545;
     }
 
     .payment-instructions {
-        text-align: center;
-        font-size: 0.9rem;
-        color: #666;
+        background: #f0f7ff; 
+        border: 1px solid #d0e4ff;
+        padding: 12px; /* Ditingkatkan */
         margin-top: 15px;
-        background: #f9f9f9;
-        padding: 10px;
         border-radius: 8px;
+        text-align: left;
     }
     .payment-instructions p {
-        margin: 5px 0;
-    }
-    /* --- END STYLES BARU --- */
-
-
-    .close-btn {
-      margin-top: 10px;
-      background: none;
-      border: none;
-      color: #007aff;
-      font-weight: bold;
-      cursor: pointer;
+        margin: 5px 0; /* Ditingkatkan */
+        font-size: 0.85rem; 
+        color: #666;
+        line-height: 1.4;
     }
     /* === END MODAL STYLES === */
 
 
     footer {
       margin-top: 50px;
+      padding-top: 15px;
       text-align: center;
       color: #666;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       width: 100%;
       max-width: 900px;
-      /* Memastikan footer berada di bawah */
       padding-bottom: 20px; 
+      border-top: 1px solid #eee; 
     }
 
     footer a {
       color: #007aff;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -332,8 +459,35 @@
   <header id="main-header">
     <div class="logo-text">⚡ NetHub Digital</div>
   </header>
+  
+  <div class="hero-section">
+      <div class="marquee-container">
+          <span class="marquee-text">
+              Layanan Isi Kuota Cepat, Aman, & Otomatis. &bull; Proses Instan 24 Jam Nonstop. &bull; Jaminan Harga Termurah! &nbsp; 
+          </span>
+          <span class="marquee-text">
+              Layanan Isi Kuota Cepat, Aman, & Otomatis. &bull; Proses Instan 24 Jam Nonstop. &bull; Jaminan Harga Termurah!
+          </span>
+      </div>
+      
+      <div class="trust-stats">
+          <div class="stat-item">
+              <span>99.9%</span>
+              <small>Sukses Transaksi</small>
+          </div>
+          <div class="stat-item">
+              <span>15.000+</span>
+              <small>Pelanggan Aktif</small>
+          </div>
+          <div class="stat-item">
+              <span>24/7</span>
+              <small>Proses Otomatis</small>
+          </div>
+      </div>
+  </div>
 
   <div class="main-content">
+    
     <section class="category-container">
       <div class="category" id="cat-indosat" onclick="toggleProducts('indosat')">
         <img src="https://iili.io/KyFri8u.png" alt="Indosat" />
@@ -359,47 +513,149 @@
       </div>
   </div>
 
+  <div id="notification-container"></div>
+
   <footer>
     Butuh bantuan? Hubungi <a href="https://wa.me/6285751817154" target="_blank">Admin</a><br>
-    © 2024 NetHub Digital. Semua Hak Dilindungi.
+    © 2025 NetHub Digital. Semua Hak Dilindungi.
   </footer>
 
   <script>
-    // SANDI ADMIN dihapus
-    // STATUS READY
-    const R = "<span class='ready-status'>✅ Ready Stock</span> | ";
-    
-    // VARIABEL PRODUK GLOBAL
+    // Data Produk (Dipertahankan)
+    function formatProductDesc(desc) {
+        if (desc.startsWith('❌ Habis')) {
+            return `<span class='status-habis'>❌ Habis</span> | ${desc.substring(9).replace(/<br>/g, '\n')}`;
+        }
+        if (desc.startsWith('✅ Ready Stock')) {
+            return `<span class='ready-status'>✅ Ready Stock</span> | ${desc.substring(16).replace(/<br>/g, '\n')}`;
+        }
+        return desc.replace(/<br>/g, '\n');
+    }
+
     let products = {
       indosat: [
-        { name: 'Indosat 50GB', price: 55000, desc: R + '- Kuota Indosat Aktif 28 Hari<br>- Jaringan 4G/5G seluruh Indonesia<br>- Garansi sesuai masa aktif<br>- Proses cepat otomatis' },
-        { name: 'Indosat 80GB', price: 95000, desc: R + '- Kuota Indosat Aktif 30 Hari<br>- Jaringan 4G/5G seluruh Indonesia<br>- Garansi sesuai masa aktif<br>- Proses cepat otomatis' }
+        { name: 'Indosat 50GB', price: 55000, desc: '✅ Ready Stock | - Kuota Indosat Aktif 28 Hari<br>- Jaringan 4G/5G seluruh Indonesia<br>- Garansi sesuai masa aktif<br>- Proses cepat otomatis' },
+        { name: 'Indosat 80GB', price: 95000, desc: '✅ Ready Stock | - Kuota Indosat Aktif 30 Hari<br>- Jaringan 4G/5G seluruh Indonesia<br>- Garansi sesuai masa aktif<br>- Proses cepat otomatis' }
       ],
       telkomsel: [
-        { name: 'Telkomsel 30GB', price: 65000, desc: R + '- Kuota Nasional aktif 30 hari<br>- Berlaku semua jaringan<br>- Garansi masa aktif penuh<br>- Aktivasi instan' },
-        { name: 'Telkomsel 80GB', price: 120000, desc: R + '- Kuota Nasional aktif 30 hari<br>- Bonus tambahan 5GB YouTube<br>- Garansi masa aktif penuh<br>- Aktivasi instan' }
+        { name: 'Telkomsel 30GB', price: 65000, desc: '✅ Ready Stock | - Kuota Nasional aktif 30 hari<br>- Berlaku semua jaringan<br>- Garansi masa aktif penuh<br>- Aktivasi instan' },
+        { name: 'Telkomsel 80GB', price: 120000, desc: '✅ Ready Stock | - Kuota Nasional aktif 30 hari<br>- Bonus tambahan 5GB YouTube<br>- Garansi masa aktif penuh<br>- Aktivasi instan' }
       ],
       xl: [
         { name: ' SUPERMINI', price: 39000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 13–15 GB<br>- AREA 2: 15–17 GB<br>- AREA 3: 20–22 GB<br>- AREA 4: 30–32 GB' },
-        { name: ' MINI', price: 50000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 32–34 GB<br>- AREA 2: 34–36 GB<br>- AREA 3: 39–41 GB<br>- AREA 4: 49–51 GB' },
+        { name: ' MINI', price: 50000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 32–34 GB<br>- AREA 2: 34–36 GB<br>- AREA 3: 39–41 GB<br>- AREA 4: 49–51 GB' },
         { name: ' BIG', price: 55000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 38–40 GB<br>- AREA 2: 40–42 GB<br>- AREA 3: 45–47 GB<br>- AREA 4: 55–57 GB' }, 
-        { name: ' JUMBO V2', price: 63000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 50–53 GB<br>- AREA 2: 52–55 GB<br>- AREA 3: 57–60 GB<br>- AREA 4: 67–70 GB' },
-        { name: ' BIG SUPER', price: 71000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 63–65 GB<br>- AREA 2: 65–67 GB<br>- AREA 3: 70–72 GB<br>- AREA 4: 80–82 GB' },
-        { name: ' JUMBO', price: 85000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 65 GB<br>- AREA 2: 70 GB<br>- AREA 3: 83 GB<br>- AREA 4: 123 GB' },
-        { name: ' JUMBO V3', price: 87000, desc: R + 'Masa aktif: 27/28 hari<br>- AREA 1: 87–90 GB<br>- AREA 2: 89–92 GB<br>- AREA 3: 94–97 GB<br>- AREA 4: 104–107 GB' }
+        { name: ' JUMBO V2', price: 63000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 50–53 GB<br>- AREA 2: 52–55 GB<br>- AREA 3: 57–60 GB<br>- AREA 4: 67–70 GB' },
+        { name: ' BIG SUPER', price: 71000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 63–65 GB<br>- AREA 2: 65–67 GB<br>- AREA 3: 70–72 GB<br>- AREA 4: 80–82 GB' },
+        { name: ' JUMBO', price: 85000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 65 GB<br>- AREA 2: 70 GB<br>- AREA 3: 83 GB<br>- AREA 4: 123 GB' },
+        { name: ' JUMBO V3', price: 87000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 87–90 GB<br>- AREA 2: 89–92 GB<br>- AREA 3: 94–97 GB<br>- AREA 4: 104–107 GB' }
       ]
     };
+    
+    // FUNGSI BARU UNTUK NOTIFIKASI FIKTIF
+    const customerNames = ["Andi", "Budi", "Citra", "Dewi", "Eko", "Fajar", "Gita", "Hadi", "Indah", "Joko", "Karin", "Lita", "Mamat", "Nana", "Putri", "Rizky", "Santi", "Tono", "Umar", "Vina", "Wulan", "Yanto", "Zia"];
+    let readyProducts = [];
+    let lastNotifIndex = -1; // Index notifikasi terakhir yang muncul
 
+    // Fungsi utilitas untuk memotong nama
+    function shortenName(name) {
+        return name.substring(0, 2) + '..';
+    }
+    
+    // 1. Kumpulkan Produk yang Ready
+    function compileReadyProducts() {
+        readyProducts = [];
+        for (const key in products) {
+            products[key].forEach(p => {
+                if (p.desc.startsWith('✅ Ready Stock')) {
+                    readyProducts.push({
+                        name: p.name.trim(),
+                        price: p.price
+                    });
+                }
+            });
+        }
+    }
+    
+    // 2. Tampilkan Notifikasi
+    function showFakeNotification() {
+        if (readyProducts.length === 0) return;
+
+        const container = document.getElementById('notification-container');
+        
+        // Memilih index acak, memastikan tidak sama dengan notifikasi terakhir
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * readyProducts.length);
+        } while (randomIndex === lastNotifIndex && readyProducts.length > 1);
+        
+        lastNotifIndex = randomIndex;
+        
+        const randomProduct = readyProducts[randomIndex];
+        const randomName = customerNames[Math.floor(Math.random() * customerNames.length)];
+        const formattedPrice = randomProduct.price.toLocaleString('id-ID');
+        const shortName = shortenName(randomName);
+
+
+        const notificationHTML = `
+            <div class="fake-notification show">
+                <span class="notif-icon">✅</span>
+                <div class="notif-text">
+                    Transaksi Berhasil! <br>
+                    <strong>${shortName}..</strong> membeli ${randomProduct.name} (Rp ${formattedPrice}).
+                </div>
+            </div>
+        `;
+        
+        container.innerHTML = '';
+        container.innerHTML = notificationHTML;
+
+        // Atur agar notifikasi hilang setelah 6 detik
+        setTimeout(() => {
+            const notif = container.querySelector('.fake-notification');
+            if(notif) notif.classList.remove('show');
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 600); 
+            
+        }, 5800); 
+    }
+
+    // 3. Loop Notifikasi (Mempertahankan delay acak)
+    function startNotificationLoop() {
+        compileReadyProducts();
+        
+        // Interval acak antara 12 hingga 25 detik (waktu antara notifikasi selesai dan notifikasi berikutnya dimulai)
+        const randomInterval = Math.floor(Math.random() * (25000 - 12000 + 1)) + 12000; 
+        
+        // Jeda acak (misal 3-10 detik) sebelum notifikasi benar-benar muncul
+        const randomDelay = Math.floor(Math.random() * (10000 - 3000 + 1)) + 3000; 
+        
+        setTimeout(() => {
+            showFakeNotification(); 
+            // Setelah notifikasi tampil, panggil loop berikutnya dengan interval acak
+            setTimeout(startNotificationLoop, randomInterval);
+        }, randomDelay);
+    }
+    
+    // Jalankan Loop Notifikasi saat Halaman dimuat
+    document.addEventListener('DOMContentLoaded', startNotificationLoop);
+
+
+    // FUNGSI LAINNYA (Dipertahankan dan Dimodifikasi)
     let activeCategory = null;
+    let selectedPrice = 0;
+    let selectedProduct = ''; // Variabel baru untuk menyimpan nama produk
+    let countdownInterval = null;
 
-    // =======================================================
-    // FUNGSI UTAMA USER INTERFACE
-    // =======================================================
 
     function toggleProducts(category) {
       const section = document.getElementById('productSection');
       const allCategories = document.querySelectorAll('.category');
       const currentCategoryElement = document.getElementById(`cat-${category}`);
+      
+      let shouldScroll = true;
 
       if (activeCategory === category) {
         section.style.display = 'none';
@@ -407,6 +663,11 @@
         activeCategory = null;
         return; 
       }
+      
+      if (activeCategory !== null) {
+          shouldScroll = false;
+      }
+
 
       activeCategory = category;
 
@@ -415,40 +676,49 @@
 
       section.innerHTML = '';
       
-      // Tambahkan Tombol Cek Area XL (Hanya untuk XL)
       if (category === 'xl') {
           const checkAreaLink = document.createElement('a');
           checkAreaLink.href = "https://raw.githack.com/vieralola/Cekareaviera.html/main/Cekareaviera.html";
           checkAreaLink.target = "_blank";
           checkAreaLink.className = "product-utility-link";
-          checkAreaLink.textContent = "🗺️ Klik Di Sini Untuk Cek Area XL Akrab";
+          checkAreaLink.textContent = "🗺️ Cek Area XL Akrab (Wajib Klik!)";
           section.appendChild(checkAreaLink);
       }
 
       products[category].forEach(p => {
+        const isReady = p.desc.startsWith('✅ Ready Stock');
+        const statusText = isReady ? `<span class='ready-status'>✅ Ready</span>` : `<span class='status-habis'>❌ Habis</span>`;
+        const buttonClass = isReady ? 'buy-btn' : 'buy-btn sold-out-btn';
+        // Mengubah pemanggilan openModal untuk menyertakan nama produk
+        const buttonAction = isReady ? `onclick='openModal(${p.price}, "${p.name}")'` : 'disabled';
+        
+        const rawDesc = p.desc.replace(/✅ Ready Stock \| /, '').replace(/❌ Habis \| /, '');
+        
         const div = document.createElement('div');
         div.className = 'product-card';
-        // Fungsi openModal sekarang menerima harga
-        div.innerHTML = `<h4><span>${p.name}</span></h4><p>${p.desc}</p><p><strong>Harga: Rp ${p.price.toLocaleString()}</strong></p><button class='buy-btn' onclick='openModal(${p.price})'>Beli Sekarang</button>`;
+        
+        div.innerHTML = `
+          <h4><span>${p.name}</span>${statusText}</h4>
+          <p>${rawDesc.replace(/<br>/g, '<br>')}</p>
+          <p><strong>Harga: Rp ${p.price.toLocaleString('id-ID')}</strong></p>
+          <button class='${buttonClass}' ${buttonAction}>${isReady ? 'Beli Sekarang' : 'Stok Habis'}</button>
+        `;
         section.appendChild(div);
       });
       
       section.style.display = 'block';
-      section.scrollIntoView({ behavior: 'smooth' });
+      if(shouldScroll){
+          section.scrollIntoView({ behavior: 'smooth' });
+      }
     }
     
-    // =======================================================
-    // FUNGSI MODAL PEMBAYARAN
-    // =======================================================
-    let selectedPrice = 0;
-    let countdownInterval = null; // Variabel untuk menyimpan ID interval timer
-
-    function openModal(price) {
+    // Fungsi openModal diubah untuk menerima nama produk
+    function openModal(price, productName) {
       selectedPrice = price;
-      // Langkah 1: Tampilkan input Nomor HP
+      selectedProduct = productName; // Simpan nama produk
       document.getElementById('modalContent').innerHTML = `
         <h3>Masukkan Nomor HP</h3>
-        <input type='number' id='phoneNumber' placeholder='08xxxxxxxxxx' />
+        <input type='number' id='phoneNumber' placeholder='Contoh: 081234567890' />
         <button class='buy-btn' onclick='showQR()'>Bayar Sekarang</button>
         <button class='close-btn' onclick='closeModal()'>Batal</button>
       `;
@@ -457,7 +727,6 @@
 
     function closeModal() {
       document.getElementById('paymentModal').style.display = 'none';
-      // Hentikan timer jika sedang berjalan
       if (countdownInterval) {
         clearInterval(countdownInterval);
         countdownInterval = null;
@@ -465,7 +734,6 @@
     }
 
     function showQR() {
-      // Perhatian: String QRIS ini bersifat statis dan hanya untuk demo tampilan.
       const qrString = '00020101021126670016COM.NOBUBANK.WWW01189360050300000907180214531277541631500303UMI51440014ID.CO.QRIS.WWW0215ID20254466748920303UMI5204481253033605802ID5914Pulsa CELLULAR6009INDONESIA61059024262070703A0163045CAF';
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrString)}&size=220x220`;
       const modal = document.getElementById('modalContent');
@@ -476,13 +744,13 @@
         return;
       }
       
-      // Langkah 2: Tampilkan QRIS dan rincian transaksi (Tampilan Profesional Baru)
       modal.innerHTML = `
         <h3>Pembayaran QRIS</h3>
         
         <div class="transaction-details">
-            <p><span>Nominal Transfer:</span> <strong>Rp ${selectedPrice.toLocaleString()}</strong></p>
+            <p><span>Produk:</span> <strong>${selectedProduct}</strong></p>
             <p><span>Nomor Tujuan:</span> <strong>${phone}</strong></p>
+            <p><span>Total Bayar:</span> <strong style="color: #e91e63;">Rp ${selectedPrice.toLocaleString('id-ID')}</strong></p>
         </div>
 
         <div class="qr-container">
@@ -490,30 +758,33 @@
             <a href="${qrUrl}" download="NetHub_Payment_QRIS.png">
                 <img class='qr-image' src='${qrUrl}' alt='QRIS Payment' />
             </a>
-            <a href="${qrUrl}" class="download-qr-link" download="NetHub_Payment_QRIS.png">
+            <a href="${qrUrl}" class="download-qr-link" download="NetHub_Payment_QRIS.png" style="font-size: 0.9rem; color: #007aff; display: block; margin-top: 5px;">
                 Unduh Kode QR
             </a>
         </div>
         
         <div class="payment-instructions">
-            <p>Silakan pindai (scan) Kode QR di atas menggunakan aplikasi perbankan atau e-wallet Anda.</p>
-            <p>Pastikan nominal transfer sudah sesuai.</p>
-            <p style="margin-top: 8px;"><strong>Setelah transfer, pesanan akan otomatis diproses.</strong></p>
+            <p style="font-weight: 600; color: #007aff;">LANGKAH 1:</p>
+            <p>Silakan **pindai (scan) Kode QR** di atas menggunakan aplikasi perbankan (BCA, Mandiri, BRI, dll.) atau e-wallet (Dana, GoPay, OVO, ShopeePay).</p>
+            
+            <p style="font-weight: 600; color: #007aff; margin-top: 10px;">LANGKAH 2:</p>
+            <p>Pastikan nominal transfer **Rp ${selectedPrice.toLocaleString('id-ID')}** sudah sesuai.</p>
+            
+            <p style="margin-top: 15px; font-size: 1rem;">
+                <strong><span style="color: #28a745;">✅ Setelah transfer berhasil, pesanan akan otomatis diproses dalam 1-5 menit.</span></strong>
+            </p>
         </div>
 
-        <button class='close-btn' onclick='closeModal()'>Tutup</button>
+        <button class='buy-btn' style="margin-top: 20px; background: #6c757d;" onclick='closeModal()'>Selesai</button>
       `;
       
-      // Mulai timer 10 menit (600 detik)
       const timerDisplay = document.getElementById('payment-timer');
       startCountdown(60 * 10, timerDisplay);
     }
     
-    // FUNGSI BARU UNTUK TIMER HITUNG MUNDUR
     function startCountdown(duration, displayElement) {
       let timer = duration, minutes, seconds;
       
-      // Hapus interval lama jika ada (untuk mencegah double timer)
       if (countdownInterval) {
         clearInterval(countdownInterval);
       }
@@ -532,13 +803,10 @@
           countdownInterval = null;
           displayElement.innerHTML = "<strong style='color: red;'>Waktu Habis!</strong>";
           
-          // Otomatis tutup modal setelah 2 detik
           setTimeout(closeModal, 2000);
         }
       }, 1000);
     }
-
-    // FUNGSI ADMIN PANEL DIHAPUS
     
   </script>
 </body>
