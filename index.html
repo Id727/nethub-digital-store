@@ -31,11 +31,11 @@
       font-family: 'Roboto', sans-serif;
       background: linear-gradient(180deg, #f9fafc 0%, #eef1f6 100%);
       color: #333;
-      display: flex;
-      flex-direction: column;
+      display: flex; /* Diperlukan untuk Sticky Footer */
+      flex-direction: column; /* Diperlukan untuk Sticky Footer */
       align-items: center;
       padding: 20px 20px 0; 
-      min-height: 10vh; 
+      min-height: 100vh; /* Diperbarui: Membuat body setinggi viewport */
     }
 
     header {
@@ -59,7 +59,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* MARQUEE DAN STATISTIK (Proporsional dan Compact) */
+    /* MARQUEE DAN STATISTIK */
     .hero-section {
         width: 100%;
         max-width: 600px;
@@ -84,8 +84,8 @@
         font-size: 0.85rem; 
         font-weight: 600;
         color: #007aff;
-        animation: marquee 25s linear infinite; /* DURASI DIPERLAMBAT */
-        padding-right: 200px; /* PERBAIKAN: Menambahkan ruang agar teks menyambung tanpa boas */
+        animation: marquee 25s linear infinite; 
+        padding-right: 200px; /* PERBAIKAN: Memastikan teks menyambung tanpa jeda kosong (boas) */
     }
     
     .trust-stats {
@@ -124,7 +124,7 @@
         max-width: 600px; 
         gap: 20px;
         align-items: center;
-        flex-grow: 1; 
+        flex-grow: 1; /* Diperbarui: Mengambil sisa ruang untuk mendorong footer */
         padding-bottom: 20px; 
     }
     
@@ -393,8 +393,8 @@
     .transaction-details p {
         font-size: 0.95rem;
         margin-bottom: 5px; 
-        display: flex; /* Tambahan untuk memisahkan label dan value */
-        justify-content: space-between; /* Tambahan untuk memisahkan label dan value */
+        display: flex; 
+        justify-content: space-between; 
     }
     .transaction-details p strong {
         font-size: 1.05rem; 
@@ -422,13 +422,13 @@
     .payment-instructions {
         background: #f0f7ff; 
         border: 1px solid #d0e4ff;
-        padding: 12px; /* Ditingkatkan */
+        padding: 12px; 
         margin-top: 15px;
         border-radius: 8px;
         text-align: left;
     }
     .payment-instructions p {
-        margin: 5px 0; /* Ditingkatkan */
+        margin: 5px 0; 
         font-size: 0.85rem; 
         color: #666;
         line-height: 1.4;
@@ -512,12 +512,7 @@
     <div class="modal-content" id="modalContent">
       </div>
   </div>
-<br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
+
   <div id="notification-container"></div>
 
   <footer>
@@ -552,13 +547,14 @@
         { name: ' BIG', price: 55000, desc: '❌ Habis | Masa aktif: 27/28 hari<br>- AREA 1: 38–40 GB<br>- AREA 2: 40–42 GB<br>- AREA 3: 45–47 GB<br>- AREA 4: 55–57 GB' }, 
         { name: ' JUMBO V2', price: 63000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 50–53 GB<br>- AREA 2: 52–55 GB<br>- AREA 3: 57–60 GB<br>- AREA 4: 67–70 GB' },
         { name: ' BIG SUPER', price: 71000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 63–65 GB<br>- AREA 2: 65–67 GB<br>- AREA 3: 70–72 GB<br>- AREA 4: 80–82 GB' },
-        { name: ' JUMBO', price: 85000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 65 GB<br>- AREA 2: 70 GB<br>- AREA 3: 83 GB<br>- AREA 4: 123 GB' },
-        { name: ' JUMBO V3', price: 87000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 87–90 GB<br>- AREA 2: 89–92 GB<br>- AREA 3: 94–97 GB<br>- AREA 4: 104–107 GB' }
+        { name: ' JUMBO', price: 83000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 65 GB<br>- AREA 2: 70 GB<br>- AREA 3: 83 GB<br>- AREA 4: 123 GB' },
+        { name: ' JUMBO V3', price: 88000, desc: '✅ Ready Stock | Masa aktif: 27/28 hari<br>- AREA 1: 87–90 GB<br>- AREA 2: 89–92 GB<br>- AREA 3: 94–97 GB<br>- AREA 4: 104–107 GB' }
       ]
     };
     
     // FUNGSI BARU UNTUK NOTIFIKASI FIKTIF
-    const customerNames = ["Andi", "Budi", "Citra", "Dewi", "Eko", "Fajar", "Gita", "Hadi", "Indah", "Joko", "Karin", "Lita", "Mamat", "Nana", "Putri", "Rizky", "Santi", "Tono", "Umar", "Vina", "Wulan", "Yanto", "Zia"];
+    const customerNames = ["Abas", "Aditya", "Agung", "Aji", "Akbar", "Aldi", "Ali", "Amin", "Andra", "Angga", "Anisa", "Anton", "Aris", "Aura", "Ayu", "Bakhtiar", "Bayu", "Brian", "Bulan", "Cahyo", "Cindy", "Daffa", "Dani", "Denny", "Desi", "Dimas", "Doni", "Dora", "Edi", "Eka", "Eko", "Ella", "Elyas", "Erna", "Fahmi", "Faisal", "Fathir", "Ferdi", "Firman", "Fitri", "Galih", "Gani", "Gede", "Gia", "Habib", "Helena", "Heru", "Ida", "Ilham", "Intan", "Irma", "Ivan", "Jaja", "Jaka", "Jali", "Juli", "Juned", "Kania", "Kiki", "Krisna", "Laila", "Lukman", "Maimun", "Maria", "Mariam", "Medi", "Meli", "Mila", "Mirna", "Mona", "Nabila", "Nadia", "Nanda", "Nani", "Nita", "Nurul", "Pandu", "Permata", "Puji", "Rama", "Rani", "Rani", "Ratna", "Rina", "Rio", "Risa", "Robby", "Romi", "Safira", "Sari", "Satria", "Selvi", "Siti", "Sule", "Sulis", "Surya", "Tari", "Taufik", "Titi", "Toni", "Ulfa", "Usnita", "Wahyu", "Yeni", "Yoga", "Yuli", "Yusuf"
+, "Budi", "Citra", "Dewi", "Eko", "Fajar", "Gita", "Hadi", "Indah", "Joko", "Karin", "Lita", "Mamat", "Nana", "Putri", "Rizky", "Santi", "Tono", "Umar", "Vina", "Wulan", "Yanto", "Zia"];
     let readyProducts = [];
     let lastNotifIndex = -1; // Index notifikasi terakhir yang muncul
 
@@ -773,7 +769,7 @@
             <p>Silakan **pindai (scan) Kode QR** di atas menggunakan aplikasi perbankan (BCA, Mandiri, BRI, dll.) atau e-wallet (Dana, GoPay, OVO, ShopeePay).</p>
             
             <p style="font-weight: 600; color: #007aff; margin-top: 10px;">LANGKAH 2:</p>
-            <p>Pastikan nominal transfer **Rp ${selectedPrice.toLocaleString('id-ID')}** sudah sesuai.</p>
+            <p>Pastikan nama merchant **Pulsa CELLULAR** dan nominal transfer **Rp ${selectedPrice.toLocaleString('id-ID')}** sudah sesuai.</p>
             
             <p style="margin-top: 15px; font-size: 1rem;">
                 <strong><span style="color: #28a745;">✅ Setelah transfer berhasil, pesanan akan otomatis diproses dalam 1-5 menit.</span></strong>
